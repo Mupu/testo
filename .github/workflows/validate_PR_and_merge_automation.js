@@ -106,12 +106,12 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
     const oldFileName = filePaths[0];
     const newFileName = oldFileName.replace(/(?<=^compiler_bugs\/EC\d+_)(\S+)(?=\.jai)/, trackingIssueNumber);
     console.log(newFileName);
-    await io.mv(oldFileName, newFileName);
+    // await io.mv(oldFileName, newFileName);
   } else { // BB, folder structure
     const oldFolderName = filePaths[0].split('/').slice(0, -1).join('/');
     const newFolderName = oldFolderName.replace(/(?<=^compiler_bugs\/EC\d+_)(\S+)/, trackingIssueNumber);
     console.log(newFolderName);
-    await io.mv(oldFolderName, newFolderName);
+    // await io.mv(oldFolderName, newFolderName);
   }
 
   // Git commands to add, commit, and push changes
