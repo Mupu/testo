@@ -127,14 +127,6 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   // await exec.exec('git', ['commit', '-m', 'Squash merge PR branch into master']);
   // await exec.exec('git', ['push', 'origin', 'master']);
 
-  const { data: pr2 } = await github.rest.pulls.get({
-    ...contextRepo,
-    pull_number: prNumber
-  });
-
-  console.log(pr);
-  console.log(pr2);
-
   // const mergeResponse = await github.rest.pulls.merge({
   //   ...contextRepo,
   //   pull_number: prNumber,
