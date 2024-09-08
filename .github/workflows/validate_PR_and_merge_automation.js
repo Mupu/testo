@@ -41,7 +41,7 @@ const _validatePRStructure = async ({ github, contextRepo, prNumber }) => {
 
   console.log(isSingleFile);
   console.log(isSingleFolderWithFirstJaiFile);
-  console.log(fileResponse);
+  console.log(filePaths);
 
   // Error, PR doesnt match needed structure
   if (!isSingleFile && !isSingleFolderWithFirstJaiFile) {
