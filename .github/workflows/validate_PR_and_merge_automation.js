@@ -132,7 +132,7 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   
   const { data: commit } = await github.rest.repos.getBranch({
     ...contextRepo,
-    branch: github.context.ref
+    branch: 'issue-224'
   });
   const latestSha = commit.commit.sha;
   console.log(`Latest commit SHA on ${branch}: ${latestSha}`);
