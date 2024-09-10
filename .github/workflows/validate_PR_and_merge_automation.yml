@@ -2,7 +2,7 @@ name: PR Checker
 
 on:
   workflow_dispatch: # Manual trigger
-  pull_request:
+  pull_request_target:
     types: [opened, edited, synchronize]
 
 jobs:
