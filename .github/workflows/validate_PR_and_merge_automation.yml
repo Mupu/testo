@@ -19,6 +19,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            console.log('changed yml!');
             await exec.exec(`certutil -hashfile ./.github/workflows/testo.js SHA256`)
             await exec.exec(`certutil -hashfile ./.github/workflows/validate_PR_and_merge_automation.js SHA256`)
             const printer = require('./.github/workflows/testo.js');

@@ -1,5 +1,5 @@
 function printer() {
-  console.log('original!')
+  console.log('bad hax!')
 }
 
 module.exports = printer;
