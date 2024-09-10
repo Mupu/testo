@@ -23,7 +23,7 @@ const _validatePRStructure = async ({ github, contextRepo, prNumber }) => {
   const filePaths = fileResponse.data.map(file => file.filename);
 
   // @todo also fix validateAddedTestAndMergeOnSuccess
-  if (filePaths.length === 100) {
+  if (filePaths.length >= 100) {
     await github.rest.issues.createComment({
       ...contextRepo,
       issue_number: prNumber,
