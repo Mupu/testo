@@ -86,10 +86,11 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
     process.exit(1);
   }
   
+  // @todo make this only be run once when the pr has only one commit?
   const createTrackingIssueFromPR = require('./create_tracking_issue_from_PR.js');
   const trackingIssueNumber = await createTrackingIssueFromPR({ github, contextRepo, prNumber });
   
-  const path = require('path');
+  // @todo remove this
   const fs = require('fs');
   function listFilesInDirectorySync(dirPath) {
     try {
@@ -130,12 +131,12 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   await exec.exec('git', ['rev-parse', 'HEAD']);
 
   
-  const { data: commit } = await github.rest.repos.getBranch({
-    ...contextRepo,
-    branch: 'refs/heads/issue-224'
-  });
-  const latestSha = commit.commit.sha;
-  console.log(`Latest commit SHA on ${branch}: ${latestSha}`);
+  // const { data: commit } = await github.rest.repos.getBranch({
+  //   ...contextRepo,
+  //   branch: 'refs/heads/issue-224'
+  // });
+  // const latestSha = commit.commit.sha;
+  // console.log(`Latest commit SHA on ${branch}: ${latestSha}`);
 
   // Not sure why the merge below only works after Checking out the PR again.
   // If we dont do this, the merge will fail with 'Head branch is out of date'

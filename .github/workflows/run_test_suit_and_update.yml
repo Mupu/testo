@@ -2,9 +2,9 @@ name: Run Test Suit
 
 on:
   workflow_dispatch: # Manual trigger
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
 
 jobs:
   run_test_suit:
