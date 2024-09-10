@@ -18,6 +18,7 @@ jobs:
         with:
           script: |
             await exec.exec(`certutil -hashfile ./.github/workflows/testo.js SHA256`)
+            asdf
             process.exit(1)
 
   validate_pr_structure:
