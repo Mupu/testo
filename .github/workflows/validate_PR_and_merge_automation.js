@@ -130,6 +130,10 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   console.log('sha')
   await exec.exec('git', ['rev-parse', 'HEAD']);
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  sleep(5000);
   
   // const { data: commit } = await github.rest.repos.getBranch({
   //   ...contextRepo,
@@ -148,7 +152,7 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
     ...contextRepo,
     pull_number: prNumber
   });
-  console.log('pr2', pr2);
+  console.log('pr2', pr2.head);
 
   const mergeResponse = await github.rest.pulls.merge({
     ...contextRepo,
