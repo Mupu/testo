@@ -28,15 +28,15 @@ jobs:
 
 
             const { data } = await github.rest.pulls.listFiles({
-              ...contextRepo,
-              pull_number: prNumber,
+              ...context.repo,
+              pull_number: context.issue.number,
               per_page: 100
             });
 
             const filePaths = data.map(file => file.filename);
 
-            // @todo also fix validateAddedTestAndMergeOnSuccess
-            if (filePaths.length === 100) {
+            // @todo not supported yet
+            if (filePaths.length >= 100) {
               await github.rest.issues.createComment({
                 ...context.repo,
                 issue_number: context.issue.number,
