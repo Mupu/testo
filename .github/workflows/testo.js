@@ -1,5 +1,5 @@
 function printer() {
-  console.log('malicious js!')
+  console.log('original js!')
 }
 
 module.exports = printer;
