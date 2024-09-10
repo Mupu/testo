@@ -129,8 +129,6 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   console.log('sha')
   await exec.exec('git', ['rev-parse', 'HEAD']);
 
-  const currentSha = github.context.sha;
-  console.log(`Current commit SHA: ${currentSha}`);
   
   const { data: commit } = await github.rest.repos.getBranch({
     ...contextRepo,
