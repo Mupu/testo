@@ -130,10 +130,9 @@ const validateAddedTestAndMergeOnSuccess = async ({ github, exec, io, contextRep
   console.log('sha')
   await exec.exec('git', ['rev-parse', 'HEAD']);
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  sleep(5000);
+  console.log('waiting 10s')
+  await new Promise(r => setTimeout(r, 10000));
+  console.log('done')
   
   // const { data: commit } = await github.rest.repos.getBranch({
   //   ...contextRepo,
