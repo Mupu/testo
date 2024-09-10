@@ -37,7 +37,9 @@ jobs:
       # Use GITHUB_TOKEN so we dont trigger a infinite loop
       # when updateing the PR
 
-      # @todo potentially unsafe
+      # @todo potentially unsafe, the only reason we are using this is because
+      # updating many files via the api is bad?
+      # check again if maybe a folder is also just one call then we could checkout the base branch instead
       - name: Checkout PR
         uses: actions/checkout@v4
         with:
@@ -47,11 +49,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { validateAddedTestAndMergeOnSuccess } = require('./.github/workflows/validate_PR_and_merge_automation.js');
-            await validateAddedTestAndMergeOnSuccess({ github, exec, io, contextRepo: context.repo, prNumber: context.issue.number });
             const currentSha = context.sha;
             console.log(`Current commit SHA: ${currentSha}`);
             console.log(`Current REF: ${context.ref}`);
+
+            const { validateAddedTestAndMergeOnSuccess } = require('./.github/workflows/validate_PR_and_merge_automation.js');
+            await validateAddedTestAndMergeOnSuccess({ github, exec, io, contextRepo: context.repo, prNumber: context.issue.number });
 
       # # Not sure why the merge below only works after Checking out the PR again.
       # # If we dont do this, the merge will fail with 'Head branch is out of date'
