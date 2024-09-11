@@ -1,5 +1,4 @@
 # [ ] cross platform support
-
 # [x] Create Label on Issue, PR, and (??test suit??) if not exist
 # [x] Add label on Issue/PR create
 # [x] Jai Version Task
@@ -34,7 +33,8 @@
 # [x] rethink needed fields in depth
 # [ ] make issue/pr mention use link instead of message?
 # [x] test security
-# [ ] test if you can edit the autocreated pr from external user. Make user the owner of the pr somehow?
+# [-] test if you can edit the autocreated pr from external user. Make user the owner of the pr somehow?
+# [ ] test big repo pipeline
 
 # [x] Auto run Testsuit on push
 # [x] create test result json

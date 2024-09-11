@@ -37,6 +37,9 @@ const runTestSuitAndUpdate = async ({ github, context, exec, io }) => {
   const currentVersion = await getJaiVersion({ exec });
   let tempVersion = currentVersion
 
+  const platform = process.env.RUNNER_OS;
+  console.log(`Running on platform: ${platform}`);
+
   // Get old state of test results
   let oldTestResults = [];
   try {
@@ -49,17 +52,28 @@ const runTestSuitAndUpdate = async ({ github, context, exec, io }) => {
   console.log('Running for version:', tempVersion);
   const options = { silent: false };
   let compilerPath = await io.which('jai'); // we start with the current one
+  // This will fail on windows because we already have the real path
+  try {
+    compilerPath = fs.readlinkSync(compilerPath);
+  } catch (err) {} // ignore error
+
+  console.log('compilerPath', compilerPath);
+  let suffix = '';
+  if (platform === 'Linux')    suffix = '-linux';
+  if (platform === 'MacOS')     suffix = '-macos';
+
   const extension = path.extname(compilerPath);
   await exec.exec(`${compilerPath} bug_suit.jai`, [], options);
 
   tempVersion = decrementVersionString(tempVersion);
   console.log('Running for version:', tempVersion);
-  compilerPath = path.resolve(compilerPath, '..', '..', '..', `jai-${tempVersion}/bin`) + `${path.sep}jai${extension}`;
+  compilerPath = path.resolve(compilerPath, '..', '..', '..', `jai-${tempVersion}/bin`) + `${path.sep}jai${suffix}${extension}`;
+  console.log('compilerPath', compilerPath);
   await exec.exec(`${compilerPath} bug_suit.jai`, [], options);
 
   tempVersion = decrementVersionString(tempVersion);
   console.log('Running for version:', tempVersion);
-  compilerPath = path.resolve(compilerPath, '..', '..', '..', `jai-${tempVersion}/bin`) + `${path.sep}jai${extension}`;
+  compilerPath = path.resolve(compilerPath, '..', '..', '..', `jai-${tempVersion}/bin`) + `${path.sep}jai${suffix}${extension}`;
   await exec.exec(`${compilerPath} bug_suit.jai`, [], options);
 
 
@@ -157,9 +171,7 @@ const runTestSuitAndUpdate = async ({ github, context, exec, io }) => {
   );
   console.log('removedTests\n', removedTests);
 
-  console.log(`Running on platform: ${process.env.RUNNER_OS}`);
 
-  const platform = 'win'; //@todo get platform from env
   const oldToNewCompilerVersions = newTestResults.map(item => item.version).sort()
   const currentDate = new Date().toISOString().split('T')[0];
   
@@ -235,6 +247,7 @@ const runTestSuitAndUpdate = async ({ github, context, exec, io }) => {
 
       }
     });
+
 
     newLabels = [...new Set(newLabels)]; // remove duplicates
     await createLabels({github, context, labelNames: newLabels});

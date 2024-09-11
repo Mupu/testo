@@ -8,7 +8,12 @@ on:
 
 jobs:
   run_test_suit:
-    runs-on: [self-hosted, windows]
+    strategy:
+      matrix:
+        platform: [windows, linux]
+    runs-on: 
+     - self-hosted 
+     - ${{ matrix.platform }}
 
     steps:
       - name: Checkout repository

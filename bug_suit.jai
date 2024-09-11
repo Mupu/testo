@@ -27,7 +27,8 @@ Test_Result_Set :: struct {
 
 #run 
 {
-  #assert OS == .WINDOWS; // @todo platform specific
+  // @todo platform specific
+  #assert OS == .WINDOWS || OS == .LINUX;
 
   jai_path := get_path_of_running_executable();
 
@@ -80,7 +81,12 @@ Test_Result_Set :: struct {
     name := path_filename(it);
 
     // Program to run if it exists after compilation
-    program := tprint("%.exe", path_strip_extension(it)); // @todo platform specific
+    // @todo platform specific
+#if OS == .WINDOWS {
+    program := tprint("%.exe", path_strip_extension(it));
+} else #if OS == .LINUX {
+    program := tprint("%", path_strip_extension(it));
+}
 
     // If its a folder we need to check the folder name instead of file name
     if starts_with(name, "first.jai") {
