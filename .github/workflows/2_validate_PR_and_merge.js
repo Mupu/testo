@@ -7,7 +7,7 @@ const validatePRStructure = async ({ github, context }) => {
   });
 };
 
-// @todo test if folder checks are correct
+// @todo test if folder checks are correct 
 const _validatePRStructure = async ({ github, contextRepo, prNumber }) => {
   const { data: pr } = await github.rest.pulls.get({
     ...contextRepo,
