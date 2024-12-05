@@ -265,11 +265,10 @@ const updateGithubIssuesAndFiles = async ({
   );
 
   // Make sure that all new tests have a result for the current version on all active platforms
-  // @copyPasta
   for (const issueNumber of newIssueNumbers) {
     // It is garanteed that we at least have one result from the current machine on this version
-    let newResultsForCurrentVersion =
-      allTestResults[issueNumber][currentJaiVersion];
+    // @copyPasta
+    let newResultsForCurrentVersion = allTestResults[issueNumber][currentJaiVersion];
     if (!newResultsForCurrentVersion) {
       console.log('No results found for:', issueNumber, currentJaiVersion);
       throw new Error(
@@ -316,6 +315,7 @@ const updateGithubIssuesAndFiles = async ({
     oldResultsForCurrentVersion ||= {}; // This could happen when a new compiler version was added
 
     // It is garanteed that we at least have one result from the current machine on this version
+    // @copyPasta
     let newResultsForCurrentVersion = allTestResults[issueNumber][currentJaiVersion];
     if (!newResultsForCurrentVersion) {
       console.log('No results found for:', issueNumber, currentJaiVersion);

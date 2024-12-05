@@ -1,17 +1,30 @@
 name: 2_validate_PR_and_merge
 
 on:
-  workflow_dispatch: # Manual trigger
-  # pull_request_target:
-  #   types: [opened, edited, synchronize]
+  pull_request_target:
+    types: [synchronize, edited] # @todo remove edited
 
 jobs:
-  # The workflow file itself can be trusted, since its pull_request_target
-  workflow-modification-check:
+  # Since only workflow files themselves are safe when using pull_request_target
+  # we have to write the validation logic in the workflow file itself
+  # After that its safe to checkout the PRs code and run the validation
+  # as we know for sure, that the .github folder was not modified
+  #
+  # WARNING: THE REST OF THE CODE IS STILL TO BE CONSIDERED UNSAFE
+  
+
+  # Make sure the .github folder is not modified
+  # Then validate the PR structure to be single file or folder with first.jai 
+  pr-validation:
     runs-on: [ubuntu-latest]
+    outputs:
+      validated_commit_sha: ${{ steps.pr_safety_check.outputs.validated_commit_sha }}
+      validation_passed: ${{ steps.validate_pr_structure.outputs.validation_passed }}
+      is_single_file: ${{ steps.validate_pr_structure.outputs.is_single_file }}
+
     steps:
       - name: Check if '.github' folder was modified
-        id: modification_check
+        id: pr_safety_check
         uses: actions/github-script@v7
         with:
           script: |
@@ -21,81 +34,179 @@ jobs:
               pull_number: context.issue.number
             });
 
-            // Check that its a SB or BB
-            const match = pr.title.match(/^\[([SB]B)\]:/)?.[1]
-            if (!match) {
+            const isSBOrBB = /^\[[SB]B\]:/.test(pr.title);
+            if (!isSBOrBB) {
               console.log('This PR is not a SB or BB, ignoring it.');
-              process.exit(1);; // its not a SB or BB, ignore it since its probably a normal PR
+              core.setOutput("run_validation", false);
+              return;
             }
 
-            const { data } = await github.rest.pulls.listFiles({
+            
+            // THIS IS UNSAFE because we have a race condition from our
+            // sha of workflow trigger, to here! But it should support 3000
+            // Files via pagination.
+            // const { data } = await github.rest.pulls.listFiles({
+            //   ...context.repo,
+            //   pull_number: context.issue.number,
+            //   per_page: 100
+            // });
+            // console.log('data', data);
+            // const filePathsBad = data.map(file => file.filename);
+
+            
+
+            // This api seems to be limited to 300 files. Sadly we cant get more without splitting up the commits.
+            // Also although listFiles seems to support up to 3000, we cant use it as it does not support the 
+            // option for a sha, to remove our race condition.
+            // https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#compare-two-commits
+            const { data: comparison } = await github.rest.repos.compareCommits({
               ...context.repo,
-              pull_number: context.issue.number,
-              per_page: 100
+              base: pr.base.sha,   // Compare base branch
+              head: pr.head.sha,   // Against head of PR
+              page: 1,             // Fetch only the first page; file list is always here
+              per_page: 100,       
             });
+            const filePaths = comparison.files.map(file => file.filename);
+            console.log('filePaths', filePaths);
 
-            const filePaths = data.map(file => file.filename);
-
-            // @todo pagination not supported yet
-            if (filePaths.length >= 100) {
+            // https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#compare-two-commits
+            if (filePaths.length >= 300) {
               await github.rest.issues.createComment({
                 ...context.repo,
                 issue_number: context.issue.number,
-                body: `@Mupu, This PR has more than 100 files, please make this work and re-run the checks.`
+                body: `This PR has more than 300 files. Please reduce the number of files.`
               })
-              process.exit(1);
+              throw new Error('This PR has more than 300 files.');
             }
+
+            const fs = require('fs');
+            // Could get to big to pass around via outputs
+            console.log('saving pr_files.json');
+            fs.writeFileSync('pr_files.json', JSON.stringify(filePaths, null, 2));
+
+
+            // Get existing labels
+            const existingLabelsResponse = await github.rest.issues.listLabelsOnIssue({
+              ...context.repo,
+              issue_number: context.issue.number,
+            });
+            const existingLabels = existingLabelsResponse.data.map((l) => l.name); 
+            console.log('existingLabels', existingLabels);
+
+
 
             // Make sure .github folder is not modified
             if (filePaths.some(filePath => filePath.includes('.github'))) {
               await github.rest.issues.createComment({
                 ...context.repo,
                 issue_number: context.issue.number,
-                body: `@Mupu, This PR has modified the .github folder, which is illegal!`
+                body: `This PR has modified the .github folder, which is illegal!`
               })
-              console.log('This PR has modified the .github folder, which is illegal!');
-              process.exit(1);
+
+              // Add labels to PR
+              await github.rest.issues.setLabels({
+                ...context.repo,
+                issue_number: context.issue.number,
+                labels: [...new Set([...existingLabels, 'validation-failed']) ],
+              });
+
+              throw new Error('This PR has modified the .github folder, which is illegal!');
             }
+
+            // Remove validation-failed label
+            await github.rest.issues.setLabels({
+              ...context.repo,
+              issue_number: context.issue.number,
+              labels: [...existingLabels.filter((l) => l !== 'validation-failed') ],
+            });
 
             // Pass on the exact sha of the commit
             const commitSha = pr.head.sha;
-            console.log(`Commit SHA: ${commitSha}`);
-            core.setOutput('commit_sha', commitSha);
+            console.log(`Validated Commit SHA: ${commitSha}`);
+            core.setOutput('validated_commit_sha', commitSha);
+            core.setOutput('run_validation', true);
 
+      
 
-
-  validate_pr_structure:
-    runs-on: [self-hosted]
-    needs: workflow-modification-check
-
-    steps:
+      # This was triggered by pull_request_target it will checkout the base branch
+      # by default. Therefore we can trust the js code that is run below.
+      # Alternatively we could use the sha from above and checkout the PRs code.
+      # That sounds worse though
+      #
       # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request_target
-      # this is pull_request_target it will checkout the base branch
-      # therefore we can trust the js code that is run
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      #
+      # We need the js files
+      # - name: Checkout repository  # we will never have pr_files.json in the base branch so its fine
+      #   uses: actions/checkout@v4
 
-      - name: PR Checker
+      - name: Validate PR Structure
         uses: actions/github-script@v7
+        id: validate_pr_structure
+        if: ${{ steps.pr_safety_check.outputs.run_validation == 'true' }}
         with:
           script: |
-            const { validatePRStructure } = require('./.github/workflows/2_validate_PR_and_merge.js');
-            await validatePRStructure({ github, context });
+            // const { validatePRStructure } = require('./.github/workflows/2_validate_PR_and_merge.js');
+            // // This will throw an error if the PR structure is invalid
+            // await validatePRStructure({ github, context });
+
+
+            const fs = require('fs');
+            const filePaths = JSON.parse(fs.readFileSync('pr_files.json', 'utf-8'));
+            console.log('loaded pr_files.json', filePaths);
+
+            // The file/folder must be named after the PR number
+            const validBugNameRegexTemplate = `^compiler_bugs/[CR]EC-?\\d+_${context.issue.number}`; // @copyPasta
+            const singleFileValidBugNameRegex = new RegExp(`${validBugNameRegexTemplate}\\.jai`);
+            const validFilePathRegex =          new RegExp(`${validBugNameRegexTemplate}/`);
+            const validFirstJaiRegex =          new RegExp(`${validBugNameRegexTemplate}/first\\.jai`);
+            console.log('validBugNameRegexTemplate', validBugNameRegexTemplate);
+            console.log('singleFileValidBugNameRegex', singleFileValidBugNameRegex);
+            console.log('validFilePathRegex', validFilePathRegex);
+            console.log('validFirstJaiRegex', validFirstJaiRegex);
+
+            // Check if its a single file bug PR
+            const isSingleFile = filePaths.length === 1 && singleFileValidBugNameRegex.test(filePaths[0]);
+
+            // Check if its a single folder with first.jai file
+            const isSingleFolderWithFirstJaiFile =
+              filePaths.every((f) => validFilePathRegex.test(f)) && // All files are in one folder
+              filePaths.some((f) => validFirstJaiRegex.test(f));    // At least one file is first.jai
+
+            console.log('isSingleFile', isSingleFile);
+            console.log('isSingleFolderWithFirstJaiFile', isSingleFolderWithFirstJaiFile);
+
+            // Error, PR doesnt match needed structure
+            if (!isSingleFile && !isSingleFolderWithFirstJaiFile) {
+              throw new Error('This PR does not match the needed structure.');
+            }
+
+            // We passed the validation!
+            core.setOutput("validation_passed", true);
+            core.setOutput("is_single_file", isSingleFile);
+
+      - name: Upload file list as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr_files
+          path: pr_files.json
+          retention-days: 1 # we only need this for the next job
 
 
 
-  validate_added_test_and_merge_pr:
-    runs-on: [self-hosted]
-    needs: validate_pr_structure
+  validate-added-test-and-merge-pr:
+    runs-on: [self-hosted, linux] # @todo remove
+    needs: pr-validation
+    if: ${{ needs.pr-validation.outputs.validation_passed == 'true' }}
     # fif: github.event.pull_request.head.repo.fork == true || github.event.pull_request.user.type == 'Bot'
 
     # This is insecure because it (1) checks out the PRs code and (2) runs jai code from the PR which could be malicious
     # so we need to make sure it got approved
-    environment: test # @todo do we only wanna run this on forks?
+    # environment: test # @todo do we only wanna run this on forks?
 
     steps:
-      - uses: actions/create-github-app-token@v1
-        id: app-token
+      - name: Get App Token
+        uses: actions/create-github-app-token@v1
+        id: app_token
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -106,38 +217,49 @@ jobs:
       # @todo potentially unsafe, the only reason we are using this is because
       # updating many files via the api is bad?
       # check again if maybe a folder is also just one call then we could checkout the base branch instead
-      - name: Checkout PR
-        uses: actions/checkout@v4
+      # - name: Checkout PRs compiler_bugs folder
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: ${{ github.repository }}
+      #     ref: ${{ needs.pr-validation.outputs.validated_commit_sha }}
+      #     sparse-checkout: |
+      #       compiler_bugs/
+
+      # - name: Checkout Base Branch .github folder
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: ${{ github.repository }}
+      #     sparse-checkout: |
+      #       .github/
+
+      - name: Download file list artifact
+        uses: actions/download-artifact@v4
         with:
-          repository: ${{ github.repository }}
-          ref: ${{ steps.modification_check.outputs.commit_sha }}
-        # with:
-        #   ref: ${{ github.event.pull_request.head.ref }}
-          
+          name: pr_files
 
       - name: Validate new Test and Merge Pull Request
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.app-token.outputs.token }}
+          github-token: ${{ steps.app_token.outputs.token }}
           script: |
             const { validateAddedTestAndMergeOnSuccess } = require('./.github/workflows/2_validate_PR_and_merge.js');
-            await validateAddedTestAndMergeOnSuccess({ github, exec, io, contextRepo: context.repo, prNumber: context.issue.number });
+            await validateAddedTestAndMergeOnSuccess({ github, exec, io, context, is_single_file: ${{ needs.pr-validation.outputs.is_single_file }} });
 
       # # Not sure why the merge below only works after Checking out the PR again.
       # # If we dont do this, the merge will fail with 'Head branch is out of date'
-      # # Use the app-token to checkout the PR, so we can trigger
+      # # Use the app_token to checkout the PR, so we can trigger
       # # the push event when merging the PR
       # - name: Checkout Updated PR
       #   uses: actions/checkout@v4
       #   with:
-      #     token: ${{ steps.app-token.outputs.token }}
+      #     token: ${{ steps.app_token.outputs.token }}
       #     persist-credentials: false
       #     ref: ${{ github.event.pull_request.head.ref }}
 
       # - name: Merge PR
       #   uses: actions/github-script@v7
       #   with:
-      #     github-token: ${{ steps.app-token.outputs.token }}
+      #     github-token: ${{ steps.app_token.outputs.token }}
       #     script: |
       #       const mergeResponse = await github.rest.pulls.merge({
       #         ...context.repo,

@@ -6,15 +6,24 @@ const whitelistedLabels = ['insert', 'leak'];
 const convertSBIssueToPRAndSynchronize = async ({ github, context, exec }) => {
   const eventType = context.eventName; // 'issues' or 'pull_request'
   console.log('eventType', eventType);
-  if (eventType !== 'issues' && eventType !== 'pull_request') {
-    throw new Error('This action can only be triggered by issues or pull_request events.');
+  if (eventType !== 'issues' && eventType !== 'pull_request_target') {
+    throw new Error('This action can only be triggered by issues or pull_request_target events.');
   }
   const isIssue = eventType === 'issues';
   const issuePRData = isIssue ? context.payload.issue : context.payload.pull_request;
 
+  const state = issuePRData.state;
+  console.log('state', state);
+
+  if (state !== 'open') {
+    console.log('Issue/PR is not open ... skipping');
+    return;
+  }
+
+
   // Make sure its a SB
   issuePRData.body = issuePRData.body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  const isSB = /^### \[SB\]:/.test(issuePRData.body);
+  const isSB = /^\[SB\]:/.test(issuePRData.title);
   if (!isSB) {
     console.log('Issue is not a SB ... skipping');
     return;
@@ -47,7 +56,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context, exec }) => {
     throw new Error('Expected Error Code not found. Most likely the issue was not formatted correctly after editing.');
   }
 
-  const fileName = `${bug_type_letter}EC${Number.parseInt(expected_error_code,)}_${context.issue.number}`;
+  const fileName = `${bug_type_letter}EC${Number.parseInt(expected_error_code)}_${context.issue.number}`;
   const filePath = `compiler_bugs/${fileName}.jai`;
 
   const code = issuePRData.body.match(/^### Short Code Snippet\n[\S\s]*?```c\n(?<code>[\S\s]*?)```/mi).groups.code;
@@ -153,6 +162,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context, exec }) => {
       encoding: 'base64',
     });
 
+    console.log('Adding file:', filePath);
     newTree.push({
       path: filePath,
       mode: '100644', // https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28
@@ -182,7 +192,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context, exec }) => {
         ...context.repo,
         ref: `heads/${branchName}`,
         sha: newCommit.data.sha,
-        force: true,
+        // force: true,
       });
 
       console.log(`Branch '${branchName}' updated with new commit.`);

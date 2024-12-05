@@ -9,6 +9,7 @@
 # [ ] cleanup and rework (2.1)
     # [ ] Name tracker after test name
 # [x] cleanup and rework (3)
+# [ ] look at concurrency locks
 
 # [-] making the test run without offline platform? How?
        NOTE: Not directly possible (https://github.com/orgs/community/discussions/50926)

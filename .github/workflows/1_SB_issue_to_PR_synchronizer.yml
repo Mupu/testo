@@ -1,33 +1,40 @@
 name: 1_SB_issue_to_PR_synchronizer
 
 on:
-  workflow_dispatch: # Manual trigger
   issues:
     types: [opened] # new issues will be converted to PR
-  pull_request:
-    types: [edited] # edited PRs will update the PR
+  pull_request_target:
+    # edited PRs will update the PRs commits
+    types: [edited] 
 
 jobs:
-  convertSBIssueToPRAndSynchronize:
+  convert-SB-issue-to-PR-and-synchronize:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/create-github-app-token@v1
-        id: app-token
+      - name: Get App Token
+        uses: actions/create-github-app-token@v1
+        id: app_token
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: Checkout repository
+      # If this was triggered by pull_request_target it will checkout the base branch
+      # by default. Therefore we can trust the js code that is run below.
+      #
+      # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request_target
+      #
+      # We need the js files
+      - name: Checkout repository 
         uses: actions/checkout@v4
-        with: 
-          token: ${{ steps.app-token.outputs.token }}
-          persist-credentials: false
+      #   with: 
+      #     token: ${{ steps.app_token.outputs.token }}
+      #     persist-credentials: false
 
-      # Use the app-token to trigger validation
+      # Use the app_token to trigger validation
       - name: Create a new PR from SB Issue
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.app-token.outputs.token }}
+          github-token: ${{ steps.app_token.outputs.token }}
           script: |
             const convertSBIssueToPRAndSynchronize = require('./.github/workflows/1_SB_issue_to_PR_synchronizer.js');
             await convertSBIssueToPRAndSynchronize({ github, context, exec });
