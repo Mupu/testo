@@ -1,7 +1,7 @@
 # Jai Community Bug Tracker
 This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suit. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms, and notify you when they get fixed - or even when they break again. 
 
-
+# THIS IS JUST THE DEV REPO THE REAL ONE IS [HERE](https://github.com/Mupu/JaiCommunityBugTracker/)
 
 # Contributions
 ## Security
@@ -25,4 +25,4 @@ If you want to make your own version of this, or use it for general testing and 
 4) Create your own Bot or Access token to give to the workflows. This is needed to have workflows trigger other workflows.explanatory.
 
 # License
-This project is licensed under the MIT License. See LICENSE.md.
+This project is licensed under the MIT License. See [LICENSE.md](https://github.com/Mupu/JaiCommunityBugTrackerDev/blob/master/LICENSE.md).
