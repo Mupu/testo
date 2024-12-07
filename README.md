@@ -23,3 +23,6 @@ If you want to make your own version of this, or use it for general testing and 
 2) @Mupu pings
 3) Have self-hosted runners and if needed adjust runs-on labels
 4) Create your own Bot or Access token to give to the workflows. This is needed to have workflows trigger other workflows.explanatory.
+
+# License
+This project is licensed under the MIT License. See LICENSE.md.
