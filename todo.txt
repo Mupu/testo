@@ -12,8 +12,8 @@
 # [x] look at concurrency locks
       Not good, mainly because comments could get lost or things inside the ifs after first creation :(
 # [x] check if we can reduce needed permissions and filters.
-# [ ] create summary? issue? issue would need limits. readme? has bad visual support
-# [ ] readme
+# [ ] add labels for new and just fixed issues
+# [x] readme
 
 
 
@@ -38,88 +38,10 @@
 # [ ] change emailed in handling and add lable for it
 # [ ] history (de)compression
 # [ ] optional checking if test really crashes on latest version after manual approval
-# [] create the categoreies list for issue clasification
+# [ ] create the categoreies list for issue clasification
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
-# OLD TODO LIST
-#
-
-# [ ] make the independent platforms run, even when others crash?
-# [ ] think about what happens when a breaking Change in syntax happens. We should not update old results? So we can update the test and pretend we never touched it?
-# [ ] SECURITY: Make sure same version gets checked out that was previously validated. Race condition. Also make sure pulls.listFiles uses same version. 
-# [ ] mac support 
-# [ ] label colors
-# [ ] assign original owner to issue tracker / Mention him and give him power?
-# [ ] make issue/pr mention use link instead of message?
-# [ ] test big repo pipeline
-# [ ] think about complete revamp
-# [ ] add note about not outputting exe when run-time is not needed/wanted
-# [x] Create Label on Issue, PR, and (??test suit??) if not exist
-# [x] Add label on Issue/PR create
-# [x] Jai Version Task
-# [x] refactor to share js files
-# [x] mention issue from PR
-# [x] create message that further discussion are supposed to be held on issue
-# [x] Update issue status on !Emailed
-# [x] parse !jonsaid
-# [x] PR and issue template (issue: i will make pr checkbox)
-# [x] parse description
-# [x] parse and add not emailed tag (also remove it on emiledin)
-# [x] parse code snippet if single file
-# [x] parse code description if single file
-# [x] automated PR for single file 
-# [x] JonSaid add date
-# [x] close PR update to parse the things
-# [x] validate_PR_and_merge_automation
-# [x] add broken platform info
-# [x] issue mention not working after PR create
-# [x] commit the test_result.json, is there any other way around that? we just 
-    # use it to track new issues. Maybe we could check the issues history of the test
-    # and do the things we need to do, when we see it doesnt have any entries?
-# [x] rename PR file to new issue number, so we know which file belongs to what issue
-    # make sure it checks if it is a directory. Not sure how well we can handle that case
-    # in confidently doing the right thing. If it is just a single file in the commit we know
-    # that is the bug.
-    # Scan all files, make sure its either a single file in bug dir, or a single folder. 
-    # Otherwisse reject with comment.
-# [x] rethink needed fields in depth
-# [x] test security
-# [~] jai dropdown and parsing of older version
-# [-] test if you can edit the autocreated pr from external user. Make user the owner of the pr somehow?
-
-# [x] Auto run Testsuit on push
-# [x] create test result json
-# [x] run for past 3-5 jai versions
-# [x] gather all test date, get it inot actions and do comparisons
-# [x] new issure tracker design
-# [x] Auto run testsuit on approval of PR to check it actually crashes
-# [x] Update issue on test results
-#     [x] change state, dates, labels
-#     [x] how to map name to issue number? maybe we DO need an id
-# [ ] summary tracker design (as txt because of size limitation?)
-# [ ] Update summary on test results
-#     [ ] link issue number
-#     [ ] foldable source code if single file, otherwise link
-#     [ ] add 'new' section, if reported at compilerversion (could still bebroken backwards) 
-#         or reopen compiler version (!= last encounter, maybe change that?)
-#     [ ] column ordering?
-#     [ ] recently fixed section (last 2 compiler versions?)
 
