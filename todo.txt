@@ -12,6 +12,8 @@
 # [x] look at concurrency locks
       Not good, mainly because comments could get lost or things inside the ifs after first creation :(
 # [x] check if we can reduce needed permissions and filters.
+# [ ] create summary? issue? issue would need limits. readme? has bad visual support
+# [ ] readme
 
 
 
@@ -22,7 +24,6 @@
 # [ ] test BB pipeline
       currently problemo, because createTree is failing on forks, even with all permissions...
 # [ ] test SB custom fork
-# [ ] readme
 
 
 #
@@ -35,7 +36,6 @@
 # [x] update issue template to support is_runtime_test
 # [ ] notify me when something changes but passed test was same (compiler output for example)
 # [ ] change emailed in handling and add lable for it
-# [ ] create summary? issue? issue would need limits. readme? has bad visual support
 # [ ] history (de)compression
 # [ ] optional checking if test really crashes on latest version after manual approval
 # [] create the categoreies list for issue clasification
