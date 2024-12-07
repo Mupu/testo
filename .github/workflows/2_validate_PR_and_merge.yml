@@ -184,7 +184,6 @@ jobs:
 
   # WARNING: This could get called quite some time later, than the check above
   validate-added-test-and-merge-pr:
-    permissions: write-all # @todo remove
     runs-on: [self-hosted, linux] # @todo remove linux
     needs: pr-validation
     # Only run if validation passed
@@ -228,8 +227,7 @@ jobs:
       - name: Create Tracking Issue and merge Pull Request
         uses: actions/github-script@v7
         with:
-          # @todo uncomment
-          # github-token: ${{ steps.app_token.outputs.token }} # we need to trigger the bugsuit on merge
+          github-token: ${{ steps.app_token.outputs.token }} # we need to trigger the bugsuit on merge
           script: |
             console.log(`Manual approval was given for Pull Request #${context.issue.number}...`);
 
