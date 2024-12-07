@@ -315,4 +315,6 @@ jobs:
               sha: newSafeSha, // make sure the head has not changed, from what we expected and validated!
             });
 
+            console.log('Finished merging PR', mergeResponse);
+
 
