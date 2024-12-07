@@ -25,4 +25,4 @@ If you want to make your own version of this, or use it for general testing and 
 4) Create your own Bot or Access token to give to the workflows. This is needed to have workflows trigger other workflows.explanatory.
 
 # License
-This project is licensed under the MIT License. See [LICENSE.md](https://github.com/Mupu/JaiCommunityBugTrackerDev/blob/master/LICENSE.md).
+This project is licensed under the MIT License. See [LICENSE.md](https://github.com/Mupu/JaiCommunityBugTrackerDev/blob/master/LICENSE.md)
