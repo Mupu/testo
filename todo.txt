@@ -12,14 +12,15 @@
 # [x] look at concurrency locks
       Not good, mainly because comments could get lost or things inside the ifs after first creation :(
 # [x] check if we can reduce needed permissions and filters.
-# [ ] PR template
 
 
 
 # [x] latest compiler output
 # [x] rename template to tid_PRid_CEC0.jai
 # [ ] for issue update in bug suit make rate limit works, for when a new version is released
+# [ ] PR template
 # [ ] test BB pipeline
+      currently problemo, because createTree is failing on forks, even with all permissions...
 # [ ] test SB custom fork
 # [ ] readme
 
