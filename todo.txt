@@ -23,7 +23,6 @@
 # [ ] PR template
 # [ ] test BB pipeline
       currently problemo, because createTree is failing on forks, even with all permissions...
-# [ ] test SB custom fork
 
 
 #
