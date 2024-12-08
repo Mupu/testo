@@ -67,11 +67,12 @@ body:
         If you have suggestions for new categories, please let us know by pining the maintainer.
       multiple: true
       options:
+        - None!
         - if
         - insert
         - leak
         - std:process
-        - none asdf
+        - std:basic
     validations:
       required: true
 
