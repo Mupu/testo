@@ -61,7 +61,7 @@ const createTrackingIssueFromPR = async ({ github, context, originalPRData }) =>
   const filePaths = JSON.parse(fs.readFileSync('pr_files.json', 'utf-8'));
   console.log('loaded pr_files.json', filePaths);
 
-  // We know the PR is valid, so we can just take any file
+  // We know the PR structure is valid, so we can just take any file
   const prFile = filePaths[0];
   // Extract the tracker issue number from the file path
   const trackerIssueNumber = parseInt(prFile.match(/compiler_bugs\/(\d+)_\d+_[CR]EC-?\d+(?:\.jai$|\/)/)[1]);
@@ -94,8 +94,8 @@ const createTrackingIssueFromPR = async ({ github, context, originalPRData }) =>
 
 
   //
-  // NOTE: if the workflow got cancelled right here, to comment on the tracker would get
-  // lost. But its not a big deal. 
+  // NOTE: if the workflow got cancelled right here, the comment on the 
+  // tracker would get lost. But its not a big deal. :cancelInProgress
   //
   // @todo maybe read out comments even if exist
   // and add if it wasnt there. Doesnt seem worth it though
@@ -109,7 +109,7 @@ const createTrackingIssueFromPR = async ({ github, context, originalPRData }) =>
   const originialIssueCreator = originalIssue.user.login;
   console.log('originialIssueCreator', originialIssueCreator);
 
-  // Notify the original issue creator
+  // Notify the original issue creator and link the PR number
   await github.rest.issues.createComment({
     ...context.repo,
     issue_number: issue.number,
@@ -119,7 +119,7 @@ const createTrackingIssueFromPR = async ({ github, context, originalPRData }) =>
   return issue.number;
 }
 
-// We force overwite all changes, since its the only way for us to commit and be sure 
+// We force push all changes, since its the only way for us to commit and be sure 
 // that no other commits got in the way, that we dont trust.
 const renameAllFilesToMatchTracker = async ({ github, context, originalPRData, validatedCommitSha, trackerIssueNumber }) => {
   // In case its a fork we need to push to IT, instead of our own repo
@@ -136,7 +136,7 @@ const renameAllFilesToMatchTracker = async ({ github, context, originalPRData, v
   // Fetch the commit and its tree
   const { data: commit } = await github.rest.git.getCommit({
     ...repo,
-    commit_sha: validatedCommitSha
+    commit_sha: validatedCommitSha // Even if its in a fork, we know its our trusted commit
   });
 
   const { data: tree } = await github.rest.git.getTree({
@@ -146,6 +146,7 @@ const renameAllFilesToMatchTracker = async ({ github, context, originalPRData, v
   });
 
   // Update the tree by renaming files of this PR to match the tracker issue number
+  // <tracking_issue_number>_<PRNumber>[C|R]EC<exit_code>.jai @copyPasta
   const validBugNameRegexTemplate = `^compiler_bugs/{TRACKERNUMBER}_${context.issue.number}_[CR]EC-?\\d+(?:\\.jai$|/)`; // @copyPasta
   // When running the first time, the trackerIssueNumber is 0, so we need to replace it with the actual number
   const validBugNameNoTrackerRegex = new RegExp(validBugNameRegexTemplate.replace('{TRACKERNUMBER}', 0));
@@ -180,12 +181,12 @@ const renameAllFilesToMatchTracker = async ({ github, context, originalPRData, v
   const { data: newTree } = await github.rest.git.createTree({
   ...repo,
     tree: updatedTree,
-    base_tree: commit.tree.sha,
+    base_tree: commit.tree.sha, // our trusted commit
   });
 
   // No changes, for example when just the merge had an error and we re-run the workflow
   // NOTE: This should be fine even if canceled and re-run, since the commit is the
-  // not 'active' until updateRef happened. If that goes through, we are fine.
+  // not 'active' until updateRef happened. If that goes through, we are fine. :cancelInProgress
   if (newTree.sha !== tree.sha) {
     console.log('Renaming files to match tracker issue number...');
     // Create a new commit with the updated tree

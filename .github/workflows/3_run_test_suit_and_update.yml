@@ -6,14 +6,21 @@ on:
     branches:
       - master
 
-permissions:
-  issues: write
-  contents: write
+permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}
 
+# This file doesnt have my security problems, as it runs on master. Ofc
+# if the validation by reviewers is not good enough, we are doomed
+# nothing we can do about it.
+#
+# Other than that, the only security problem would be when theres a compiler
+# secuiry issue, that gets abused, while beeing masked as a bug. But this is
+# a very unlikely scenario. Also in the worst case, the attacker would only
+# be able to run code on the runner, which is bad, but not the worst thing..
 jobs:
+  # Gather all data from all platforms
   run-test-suit:
     strategy:
       matrix:
@@ -62,9 +69,14 @@ jobs:
 
 
 
+  # Analyze the data and update the issues and files
   update_github_files_and_issues:
     needs: run-test-suit
     runs-on: [self-hosted]
+    permissions:
+      issues: write
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

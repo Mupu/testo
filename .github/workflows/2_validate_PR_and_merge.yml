@@ -16,7 +16,7 @@ concurrency:
   # In reality this should basically never happen, as its only 2 people beeing able to trigger this 
   # workflow, the maintainer and the contributer via PR edit. It's quite unlikely that it collides.
   # currently the worst outcome is a oprhaned tracker issue, which is not that bad.
-  # @todo maybe make this cancel all previous deployments instead
+  # @todo maybe make this cancel all previous deployments instead :cancelInProgress
   cancel-in-progress: true
 
 jobs:
@@ -25,12 +25,12 @@ jobs:
   # After that its safe to checkout the PRs code and run the validation
   # as we know for sure, that the .github folder was not modified
   #
-  # WARNING: THE REST OF THE CODE IS STILL TO BE CONSIDERED UNSAFE
-  
+  # WARNING: THE REST OF THE PR'S CODE IS STILL TO BE CONSIDERED UNSAFE
+  #
+  # The second part validates the PR structure to be single file or folder with first.jai 
 
-  # Make sure the .github folder is not modified. After that we *should* be
-  # able to trust the .githubs JavaScript code - even on PRs from forks.
-  # Then validate the PR structure to be single file or folder with first.jai 
+  # This validation does not care about been canceled, as it only checks the PR structure
+  # and does not modify anything :cancelInProgress
   pr-validation:
     runs-on: [ubuntu-latest]
     outputs:
@@ -49,7 +49,7 @@ jobs:
             console.log('eventType', context.eventName);
             console.log('context.payload.sender', context.payload.sender)
 
-            // Get PR data. This PR anchors the sha for the whole workflow
+            // Get PR data. *This PR anchors the sha for the whole workflow*
             const { data: pr } = await github.rest.pulls.get({
               ...context.repo,
               pull_number: context.issue.number
@@ -88,6 +88,7 @@ jobs:
             // Also although listFiles seems to support up to 3000, we cant use it as it does not support the 
             // option for a sha, to remove our race condition.
             // https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#compare-two-commits
+            // Get the file list via compareCommits using the anchored sha of the PR
             const { data: comparison } = await github.rest.repos.compareCommits({
               ...context.repo,
               base: pr.base.sha,   // Compare base branch
@@ -119,7 +120,7 @@ jobs:
             console.log('saving pr_files.json');
             fs.writeFileSync('pr_files.json', JSON.stringify(filePaths, null, 2));
 
-            // Could get to big to pass around via outputs
+            // Save PR response, also could get to big to pass around via outputs
             console.log('saving pr_response.json');
             fs.writeFileSync('pr_response.json', JSON.stringify(pr, null, 2));
 
@@ -142,8 +143,7 @@ jobs:
             console.log('loaded pr_files.json', filePaths);
 
             // The file/folder must be named after the PR number
-            // Usually the have _new in the name, but if the merge for example failed after the files 
-            // have already been renamed below, they could have a number instead of _new
+            // <tracking_issue_number>_<PRNumber>[C|R]EC<exit_code>.jai @copyPasta
             const validBugNameRegexTemplate = `^compiler_bugs/\\d+_${context.issue.number}_[CR]EC-?\\d+`; // @copyPasta
             const singleFileValidBugNameRegex = new RegExp(`${validBugNameRegexTemplate}\\.jai$`);
             const validFilePathRegex =          new RegExp(`${validBugNameRegexTemplate}/`);
@@ -176,7 +176,7 @@ jobs:
 
       # We need this for later validation as the approval could be given quite some time later
       - name: Upload Captured Data as an artifact
-        if: ${{ steps.pr_safety_check.outputs.run_validation == 'true' }} 
+        if: ${{ steps.pr_safety_check.outputs.validation_passed == 'true' }} 
         uses: actions/upload-artifact@v4
         with:
           name: pr_response
@@ -194,7 +194,7 @@ jobs:
     # Only run if validation passed
     if: ${{ needs.pr-validation.outputs.validation_passed == 'true' }} 
 
-    # Make sure this run is manually approved, because we run untrusted code.
+    # Make sure this run is manually approved, because we merge untrusted code.
     # The validation above, only makes sure the JS files are safe and that the
     # commit has the correct structure. But the jai files themselves are still
     # untrusted.
@@ -208,8 +208,8 @@ jobs:
           ref: ${{ needs.pr-validation.outputs.validated_commit_sha }}
           path: PR
 
-      # But, this is generally safer, so we can trust the js code that is run below
-      # Ofc, if validation above fails, we would still run the untrusted Jai code
+      # But, it is generally safer to use the base branch, so we kow for sure
+      # that the js code, that is run below, is safe.
       - name: Checkout Base Branch
         uses: actions/checkout@v4
         with:
@@ -229,6 +229,11 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      # currently we can get canceled anywhere inside this code, so it should run
+      # in a way to not leave the system in a bad state. At least as much as possible...
+      # :cancelInProgress
+      # We need to make sure to only use the trusted data from the validation and
+      # ignore all new commits etc
       - name: Create Tracking Issue and merge Pull Request
         uses: actions/github-script@v7
         with:
@@ -236,7 +241,7 @@ jobs:
           script: |
             console.log(`Manual approval was given for Pull Request #${context.issue.number}...`);
 
-            // If not its garanted its BB because of validation above
+            // If isSingleFile = false its garanted to be BB, because of validation above
             const isSingleFile = ${{ needs.pr-validation.outputs.is_single_file == 'true' }};
             const validatedCommitSha = '${{ needs.pr-validation.outputs.validated_commit_sha }}';
 
@@ -248,64 +253,69 @@ jobs:
 
 
             // Do some validations against the current version of PR, as a lot of time could have passed
-            // We do this not for security, but to avoid deleting commits in the force push for file renaming
-            const { data: pr } = await github.rest.pulls.get({
-              ...context.repo,
-              pull_number: context.issue.number
-            });
-            pr.body = pr.body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            // We do this not for security, but to avoid deleting commits in the force push later on
+            // DONT USE THIS DATA FOR ANYTHING THOUGH, AS IT HAS NOT BEEN VALIDATED!
+            {
+              const { data: untrusted_pr } = await github.rest.pulls.get({
+                ...context.repo,
+                pull_number: context.issue.number
+              });
+              untrusted_pr.body = untrusted_pr.body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
-            // Make sure PR is still open
-            if (pr.state !== 'open') {
-              console.log('pr.state', pr.state);
-              throw new Error('The PR is not open anymore! Aborting ...');
-            }
+              // Make sure PR is still open
+              if (untrusted_pr.state !== 'open') {
+                console.log('untrusted_pr.state', untrusted_pr.state);
+                throw new Error('The PR is not open anymore! Aborting ...');
+              }
 
-            // Make sure head sha is the same!
-            if (pr.head.sha !== validatedCommitSha) {
-              console.log('new sha', pr.head.sha);
-              console.log('old sha', validatedCommitSha);
-              throw new Error('The head sha has changed since validation! This could happen when changes happened since the time validation was requested, and manual approval was given. Aborting ...');
-            }
+              // Make sure head sha is the same!
+              if (untrusted_pr.head.sha !== validatedCommitSha) {
+                console.log('new sha', untrusted_pr.head.sha);
+                console.log('old sha', validatedCommitSha);
+                throw new Error('The head sha has changed since validation! This could happen when changes happened since the time validation was requested, and manual approval was given. Aborting ...');
+              }
 
-            // Check if title has changed
-            if (pr.title !== originalPRData.title) {
-              console.log('old title', originalPRData.title);
-              console.log('new title', pr.title);
-              throw new Error('The PR title has changed since validation! Aborting ...');
-            }
+              // Check if title has changed
+              if (untrusted_pr.title !== originalPRData.title) {
+                console.log('old title', originalPRData.title);
+                console.log('new title', untrusted_pr.title);
+                throw new Error('The PR title has changed since validation! Aborting ...');
+              }
 
-            // We could check if bodies are the same, im not sure if we want that though
-            if (pr.body !== originalPRData.body) {
-              console.log('old body', originalPRData.body);
-              console.log('new body', pr.body);
-              throw new Error('The PR body has changed since validation! Aborting ...');
+              // We could check if bodies are the same, im not sure if we want that though
+              if (untrusted_pr.body !== originalPRData.body) {
+                console.log('old body', originalPRData.body);
+                console.log('new body', untrusted_pr.body);
+                throw new Error('The PR body has changed since validation! Aborting ...');
+              }
             }
 
             //
             // Ofc, in here we could also get new race conditions, from here on. To mitigate these, we use
             // force commit while renaming, and make sure only the resulting sha is accepted for merge.
             //
-
-
-            //
-            // If we get to here, no further changes will we accepted, and even will be overwritten.
+            // Therefore if we get to here, no further changes will we accepted, and even will be overwritten.
             // From here on out we finish the job, and merge the PR.
             //
-
             //
             // THIS IS THE ONLY CRITICAL PART IN THE WHOLE WORKFLOW IN REGARD TO CANCLED WORKFLOWS
             //
 
+            // Use the base branches js!
             const { createTrackingIssueFromPR, renameAllFilesToMatchTracker } = require('./base/.github/workflows/2_create_tracking_issue_from_PR.js');
 
-            // Use Base Branch! Create Tracking issue so the bug suit already can use it.
-            // Throws if issue already exists, but is not isnt a valid template
+            // Create or use existing tracking issue so the bug suit already can use it.
+            // If canceled right after this call, it could create orphans :cancelInProgress
             const trackerIssueNumber = await createTrackingIssueFromPR({ github, context, originalPRData });
             console.log('trackerIssueNumber', trackerIssueNumber);
 
 
             // Rename all files to match the tracker issue number via force commit
+            // to make sure no unvalidated changes are accepted accidentally.
+            // The resulting sha is used for the merge later on.
+            //
+            // If canceled right after this, the issue will not have a leading 0 anymore,
+            // this means all code above must take this into account! :cancelInProgress
             const newSafeSha = await renameAllFilesToMatchTracker({ github, context, originalPRData, validatedCommitSha, trackerIssueNumber });
             console.log('newSafeSha', newSafeSha);
             console.log('validatedCommitSha', validatedCommitSha);
@@ -313,6 +323,7 @@ jobs:
             const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
             await sleep(1000); // Wait for the force commit to be processed
 
+            // Only merge if sha is still the expected one!
             const mergeResponse = await github.rest.pulls.merge({
               ...context.repo,
               pull_number: context.issue.number,

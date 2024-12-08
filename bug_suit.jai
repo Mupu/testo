@@ -3,7 +3,7 @@
 // Comiles all files in the 'compiler_bugs' directory and runs them if they compile
 // and produce a binary. If its a folder it has to contain a 'first.jai' file.
 //
-// Files must have a prefix of the form <tracking_issue_number>_<PRNumber>[C|R]EC<exit_code>.jai
+// Files must have a prefix of the form <tracking_issue_number>_<PRNumber>[C|R]EC<exit_code>.jai @copyPasta
 // Files that start with "CEC" are expected to compile with the exit code that follows
 // Files that start with "REC" are expected to run with the exit code that follows
 //
