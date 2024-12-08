@@ -777,6 +777,8 @@ const updateGithubIssuesAndFiles = async ({
       branch: 'master',
       ...(oldData ? { sha: oldData.sha } : {})
     });
+  } else {
+    console.log('No changes in test results. Skipping commit.');
   }
 };
 
