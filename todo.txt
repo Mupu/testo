@@ -8,13 +8,14 @@
 # [x] cleanup and rework (2)
 # [x] cleanup and rework (2.1)
 # [x] cleanup and rework (3)
-# [ ] check all code again
+# [x] check all code again
 # [x] look at concurrency locks
       Not good, mainly because comments could get lost or things inside the ifs after first creation :(
 # [x] check if we can reduce needed permissions and filters.
 # [ ] add labels for new and just fixed issues
 # [x] readme
-# [ ] readme link workflows and relative paths
+# [x] readme link workflows and relative paths
+# [ ] security and bug issue template
 # [ ] finish review of 3.js
 
 
