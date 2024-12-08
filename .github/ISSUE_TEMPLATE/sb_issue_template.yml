@@ -72,7 +72,6 @@ body:
         - insert
         - leak
         - std:process
-        - std:autorun
     validations:
       required: true
 
