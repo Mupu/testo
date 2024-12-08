@@ -764,15 +764,20 @@ const updateGithubIssuesAndFiles = async ({
     .getContent({ ...context.repo, path: 'old_test_results.json' })
     .catch(() => ({ data: null }));
 
-  // Commit new test_results.json
-  await github.rest.repos.createOrUpdateFileContents({
-    ...context.repo,
-    path: 'old_test_results.json',
-    message: '[CI] Update test results',
-    content: Buffer.from(JSON.stringify(allTestResults, null, 2)).toString('base64'),
-    branch: 'master',
-    ...(oldData ? { sha: oldData.sha } : {})
-  });
+  const newTestResultsString = JSON.stringify(allTestResults, null, 2);
+  const oldTestResultsString = oldData ? Buffer.from(oldData.content, 'base64').toString() : '';
+
+  // Commit new test_results.json if it has changed
+  if (newTestResultsString !== oldTestResultsString) {
+    await github.rest.repos.createOrUpdateFileContents({
+      ...context.repo,
+      path: 'old_test_results.json',
+      message: '[CI] Update test results',
+      content: Buffer.from(newTestResultsString).toString('base64'),
+      branch: 'master',
+      ...(oldData ? { sha: oldData.sha } : {})
+    });
+  }
 };
 
 module.exports = {
