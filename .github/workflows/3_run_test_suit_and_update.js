@@ -223,7 +223,7 @@ const updateGithubIssuesAndFiles = async ({
   let activePlatforms = []; // all platforms where we have found a test_results.json for
   
   let allTestResults = {};
-  const supportedPlatforms = ['windows', 'linux', 'macos']; // :platformSpecific
+  const supportedPlatforms = ['windows', 'linux', 'mac']; // :platformSpecific
   for (const platform of supportedPlatforms) {
     try {
       const data = fs.readFileSync(`${platform}/test_results.json`, 'utf8');
