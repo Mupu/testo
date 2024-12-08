@@ -279,7 +279,7 @@ const updateGithubIssuesAndFiles = async ({
     }
 
     // Enforce that all active platforms have a result for this version
-    // No matter if this runner is on a newer or older one. At least one platform
+    // No matter if this runner is on a newer or older version. If at least one platform
     // would be missing in the result set, which would get detected here.
     for (const platform of activePlatforms) {
       if (!newResultsForCurrentVersion[platform]) {
@@ -347,8 +347,7 @@ const updateGithubIssuesAndFiles = async ({
     //    -> Special case when a new compiler version was added, the old data will be empty!
 
     let relevantResultSetsAreEqual = true;
-    for (const platform of activePlatforms) {
-      // already handles case 1)
+    for (const platform of activePlatforms) { // this for loop already handles case 1)
       // Handle case 2)
       const oldResultForPlatform = oldResultsForCurrentVersion[platform];
       if (!oldResultForPlatform) {
@@ -407,16 +406,17 @@ const updateGithubIssuesAndFiles = async ({
       } else if (error.status === 410) {
         console.log(`Issue was deleted for '${issueNumber}'. Skipping update.`);
         continue;
-      }else {
+      } else {
         throw error;
       }
     }
-    if (!issue) {
+    if (!issue) { // Kinda useless? xD
       throw new Error('Issue not found, should never happen as we should have catched it already.');
     }
 
     // Replace line endings
     let newIssueBody = issue.body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
     const existingLabels = issue.labels.map((label) => label.name);
 
 
@@ -446,18 +446,19 @@ const updateGithubIssuesAndFiles = async ({
 
     // Update History in Table
     // @todo add history compression and decompression
-    for (const version of allTestResultPerVersionsSorted) {
+    for (const version of allTestResultPerVersionsSorted) { // We only iterate over versions that have results for
       let row = fullHistoryDataByVersion[version];
       if (!row) {
         // insert new row
         fullHistoryDataByVersion[version] = {};
         row = fullHistoryDataByVersion[version];
+
         getGroupNames(parseIssueHistoryRegex).forEach((groupName) => {
-          if (groupName === 'version') {
-            // Special case for version :historyColumns
+          if (groupName === 'version') { // Special case for version :historyColumns
             row[groupName] = version;
+
           } else if (activePlatforms.includes(groupName)) {
-            // We have results for the platform!
+            // We know we have results for the platform!
             const testResult = allTestResults[issueNumber][version][groupName];
             if (!testResult) {
               console.log(
@@ -467,18 +468,23 @@ const updateGithubIssuesAndFiles = async ({
                 version,
                 groupName,
               );
-              throw new Error('Should never happen!');
+              throw new Error('Should never happen, as it should have been validated before!');
             }
 
             const errorCode = testResult.is_runtime_test
               ? testResult.run_exit_code
               : testResult.compilation_exit_code;
+
             row[groupName] = testResult.passed_test
               ? `✅ - ExitCode ${errorCode}`
               : `❌ - ExitCode ${errorCode}`;
-          } else {
+
+          } else if (supportedPlatforms.includes(groupName)) {
             // We dont have any result for this platform. Maybe it was inactive
             row[groupName] = '-';
+
+          } else {
+            throw new Error('Should never happen if all places where updated correctly! :historyColumns');
           }
         });
 
@@ -504,9 +510,11 @@ const updateGithubIssuesAndFiles = async ({
               );
               throw new Error('Should never happen!');
             }
+
             const errorCode = testResult.is_runtime_test
               ? testResult.run_exit_code
               : testResult.compilation_exit_code;
+
             row[platformColumn] = testResult.passed_test
               ? `✅ - ExitCode ${errorCode}`
               : `❌ - ExitCode ${errorCode}`;
@@ -544,7 +552,7 @@ const updateGithubIssuesAndFiles = async ({
             if (column !== 'version') {
               // :historyColumns
               if (row[column].includes('❌')) {
-                // Github has a limit of 100 labels? Lets jut limit them!
+                // Github has a limit of 100 labels (unconfirmed)? Lets jut limit them!
                 // As we iterate descendingly it will always include the latest
                 // 50 broken versions
                 if (brokenVersions.length < 50) {
@@ -672,24 +680,6 @@ const updateGithubIssuesAndFiles = async ({
       latestTestOutputs = 'No test outputs available';
     }
     newIssueBody = newIssueBody.replace(/### Latest Test Outputs\n---\n[\s\S]+?\n---/, `### Latest Test Outputs\n---\n${latestTestOutputs}\n---`);
-
-
-
-    // // Notify maintainer if a test ouput changed, but the test did not toggle passing status.
-    // // This helps to find tests that need to be updated, because of syntach changes for example.
-    // const didTestPassLastRun = existingLabels.includes(currentJaiVersion) === false;
-    // const didTestPassThisRun = brokenVersions.includes(currentJaiVersion) === false;
-    // // Only notify when the result did not toggle the passing status
-    // if ((didTestPassLastRun && didTestPassThisRun) || (!didTestPassLastRun && !didTestPassThisRun)) {
-    //   if (
-        
-    //   ) {
-    //     await github.rest.issues.createComment({
-    //     ...context.repo,
-    //     issue_number: issueNumber,
-    //     body: `The test outputs have changed, but the test did not toggle the passing status. This could indicate that the test needs to be updated. Please take a look at this, @Mupu.`,
-    //   }
-    // });
 
 
 
