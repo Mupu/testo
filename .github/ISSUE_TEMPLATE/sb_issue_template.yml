@@ -71,7 +71,7 @@ body:
         - insert
         - leak
         - std:process
-        - none
+        - "none"
     validations:
       required: true
 
