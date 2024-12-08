@@ -176,7 +176,7 @@ jobs:
 
       # We need this for later validation as the approval could be given quite some time later
       - name: Upload Captured Data as an artifact
-        if: ${{ steps.pr_safety_check.outputs.validation_passed == 'true' }} 
+        if: ${{ steps.validate_pr_structure.outputs.validation_passed == 'true' }} 
         uses: actions/upload-artifact@v4
         with:
           name: pr_response
