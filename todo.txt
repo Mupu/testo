@@ -38,6 +38,7 @@
 # [ ] history (de)compression
 # [ ] optional checking if test really crashes on latest version after manual approval
 # [ ] create the categoreies list for issue clasification
+# [ ] add machine os data etc to issue like windows version
 
 
 

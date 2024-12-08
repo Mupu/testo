@@ -12,7 +12,7 @@ permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
   # We need to make sure the whole program works as expected even when canceled at any point.
-  cancel-in-progress: true # @todo test without
+  # cancel-in-progress: true # @todo test without
 
 jobs:
   # Since only workflow files themselves are safe when using pull_request_target

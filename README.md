@@ -1,5 +1,5 @@
 # Jai Community Bug Tracker
-This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suit. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms, and notify you when they get fixed - or even when they break again. 
+This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suit. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms (windows 10, linux-ubuntu-22, mac (comming soon)), and notify you when they get fixed - or even when they break again. 
 
 # THIS IS JUST THE DEV REPO THE REAL ONE IS [HERE](https://github.com/Mupu/JaiCommunityBugTracker/)
 
