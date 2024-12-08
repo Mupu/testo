@@ -96,6 +96,7 @@ Test_Result :: struct
   {
     test_result: Test_Result;
     test_result.file_path = file_path_to_compile;
+
     // Extract expected exit code and tracker issue number from file name
     {
       filename := path_filename(file_path_to_compile);
