@@ -484,7 +484,7 @@ const updateGithubIssuesAndFiles = async ({
             row[groupName] = '-';
 
           } else {
-            throw new Error('Should never happen if all places where updated correctly! :historyColumns');
+            throw new Error('Should never happen if all places where updated correctly! :historyColumns', supportedPlatforms, groupName);
           }
         });
 
