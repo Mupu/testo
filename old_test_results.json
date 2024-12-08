@@ -1,1 +1,110 @@
-{}
+{
+  "353": {
+    "beta-0.1.091": {
+      "linux": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n\nStack trace:\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux() [0x744b7e]\n/lib/x86_64-linux-gnu/libc.so.6(+0x42520) [0x78af97242520]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_ZN5Typer11infer_typesEP15Ast_Declaration+0x4ca) [0x81718a]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_ZN5Typer11infer_typesEP6Queued+0x1be) [0x8041be]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux() [0x7cc762]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_ZN9Workspace13do_pipe_inferEv+0xff) [0x7cc58f]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_ZN9Workspace10flow_pipesEb+0x11e) [0x7cef8e]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_Z13compiler_pumpP9Workspaceb+0x38d) [0x7db8fd]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_Z20do_compilation_cycleP9Workspaceb+0x52) [0x7ddff2]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_Z28workspace_thread_entry_pointPv+0x1c0) [0x7de470]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.091/bin/jai-linux(_Z16thread_middlemanPv+0x35) [0x848a25]\n/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3) [0x78af97294ac3]\n/lib/x86_64-linux-gnu/libc.so.6(+0x126850) [0x78af97326850]\n\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      },
+      "windows": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\r\n\r\nCommand line arguments:\r\n  C:/jai-beta-0.1.091/bin/jai.exe compiler_bugs/353_352_CEC1.jai\r\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n  unknown(8BD47374) : BaseThreadInitThunk\r\n\r\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      }
+    },
+    "beta-0.1.092": {
+      "linux": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n\nStack trace:\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux() [0x744b7e]\n/lib/x86_64-linux-gnu/libc.so.6(+0x42520) [0x7f560c642520]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_ZN5Typer11infer_typesEP15Ast_Declaration+0x4ca) [0x81702a]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_ZN5Typer11infer_typesEP6Queued+0x1be) [0x80404e]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux() [0x7cc5f2]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_ZN9Workspace13do_pipe_inferEv+0xff) [0x7cc41f]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_ZN9Workspace10flow_pipesEb+0x11e) [0x7cee1e]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_Z13compiler_pumpP9Workspaceb+0x38d) [0x7db78d]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_Z20do_compilation_cycleP9Workspaceb+0x52) [0x7dde82]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_Z28workspace_thread_entry_pointPv+0x1c0) [0x7de300]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.092/bin/jai-linux(_Z16thread_middlemanPv+0x35) [0x8488e5]\n/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3) [0x7f560c694ac3]\n/lib/x86_64-linux-gnu/libc.so.6(+0x126850) [0x7f560c726850]\n\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      },
+      "windows": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\r\n\r\nCommand line arguments:\r\n  C:/jai-beta-0.1.092/bin/jai.exe compiler_bugs/353_352_CEC1.jai\r\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n  unknown(8BD47374) : BaseThreadInitThunk\r\n\r\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      }
+    },
+    "beta-0.1.093": {
+      "linux": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n\nStack trace:\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux() [0x744b1e]\n/lib/x86_64-linux-gnu/libc.so.6(+0x42520) [0x713ca1a42520]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_ZN5Typer11infer_typesEP15Ast_Declaration+0x4ca) [0x8175aa]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_ZN5Typer11infer_typesEP6Queued+0x1be) [0x8045ae]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux() [0x7cc7c2]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_ZN9Workspace13do_pipe_inferEv+0xff) [0x7cc5ef]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_ZN9Workspace10flow_pipesEb+0x11e) [0x7cefee]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_Z13compiler_pumpP9Workspaceb+0x38d) [0x7db95d]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_Z20do_compilation_cycleP9Workspaceb+0x52) [0x7de052]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_Z28workspace_thread_entry_pointPv+0x1c0) [0x7de4d0]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.093/bin/jai-linux(_Z16thread_middlemanPv+0x35) [0x848e65]\n/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3) [0x713ca1a94ac3]\n/lib/x86_64-linux-gnu/libc.so.6(+0x126850) [0x713ca1b26850]\n\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      },
+      "windows": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\r\n\r\nCommand line arguments:\r\n  C:/jai-beta-0.1.093/bin/jai.exe compiler_bugs/353_352_CEC1.jai\r\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n  unknown(8BD47374) : BaseThreadInitThunk\r\n\r\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      }
+    },
+    "beta-0.1.094": {
+      "linux": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n\nStack trace:\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux() [0x744e1e]\n/lib/x86_64-linux-gnu/libc.so.6(+0x42520) [0x762d49042520]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_ZN5Typer11infer_typesEP15Ast_Declaration+0x4ca) [0x81828a]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_ZN5Typer11infer_typesEP6Queued+0x1be) [0x804f9e]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux() [0x7ccf32]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_ZN9Workspace13do_pipe_inferEv+0xff) [0x7ccd5f]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_ZN9Workspace10flow_pipesEb+0x11e) [0x7cf78e]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_Z13compiler_pumpP9Workspaceb+0x38d) [0x7dc17d]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_Z20do_compilation_cycleP9Workspaceb+0x52) [0x7de872]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_Z28workspace_thread_entry_pointPv+0x1c0) [0x7decf0]\n/home/ubuntu/Desktop/Jai/jai-beta-0.1.094/bin/jai-linux(_Z16thread_middlemanPv+0x35) [0x849b85]\n/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3) [0x762d49094ac3]\n/lib/x86_64-linux-gnu/libc.so.6(+0x126850) [0x762d49126850]\n\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      },
+      "windows": {
+        "compilation_exit_code": 3,
+        "compiler_error_output": "Error: Jai encountered an exception running the program and is terminating.\r\n\r\nCommand line arguments:\r\n  C:/jai/bin/jai.exe compiler_bugs/353_352_CEC1.jai\r\n\nThis happened outside compile-time execution, so it is likely the compiler's fault.\n\nStack trace of the compiler:\n\n  unknown(8BD47374) : BaseThreadInitThunk\r\n\r\n",
+        "compiler_output": "",
+        "expected_compilation_exit_code": 1,
+        "expected_run_exit_code": -1,
+        "is_runtime_test": false,
+        "passed_test": false,
+        "run_exit_code": -1,
+        "runtime_error_output": "",
+        "runtime_output": ""
+      }
+    },
+    "file_path": "compiler_bugs/353_352_CEC1.jai",
+    "tracking_issue_number": 353
+  }
+}
