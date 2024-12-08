@@ -9,9 +9,9 @@ body:
         Thanks for taking the time to improve this project. Please provide the details below.
         Make sure to [link the important code section](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet) via githubs permalinks.
 
-  # - type: textarea
-  #   id: suggestion
-  #   attributes:
-  #     label: Discription
-  #     description: Describe your suggestion
-  #     placeholder: Describe your suggestion
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Discription
+      description: Describe your suggestion
+      placeholder: Describe your suggestion
