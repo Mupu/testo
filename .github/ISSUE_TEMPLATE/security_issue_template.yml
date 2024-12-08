@@ -2,7 +2,6 @@ name: Security Issue
 description: Report a security-related issue
 title: "[SECURITY] "
 labels: ["security"]
-assignees: ["Mupu"]
 
 body:
   - type: markdown

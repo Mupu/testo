@@ -1,8 +1,7 @@
 name: CI Issue
 description: Report a bug related to the automation
 title: "[BUG] "
-labels: ["bug"]
-assignees: ["Mupu"]
+labels: ["leak"]
 
 body:
   - type: markdown
@@ -15,5 +14,5 @@ body:
     id: problem
     attributes:
       label: Problem description
-      description: Describe the security issue
-      placeholder: Describe the security issue
+      description: Describe the issue
+      placeholder: Describe the issue
