@@ -56,8 +56,7 @@ function parsePrBody(text) {
 }
 
 const createTrackingIssueFromPR = async ({ github, context, originalPRData }) => {
-
-    // Load the file paths instead of querying them again because of race conditions
+  // Load the file paths instead of querying them again because of race conditions
   const fs = require('fs');
   const filePaths = JSON.parse(fs.readFileSync('pr_files.json', 'utf-8'));
   console.log('loaded pr_files.json', filePaths);

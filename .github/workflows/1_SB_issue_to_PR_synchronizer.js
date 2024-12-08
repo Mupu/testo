@@ -6,8 +6,7 @@ const whitelistedLabels = ['insert', 'leak'];
 // Apart from the labels and the correct checkout, we should not have to care about any security.
 // This workflow is only supposed to convert the issue into a PR and forward edits to the PR
 // to the PR branch. The only thing it enforces is the PR body and that its only one file in the PR.
-// If its a fork we dont update anything, since the PR could be badly formatted, and it could happen,
-// that we dont have write access to the forked repository. 
+// We don't support forked SB PRs, because it doesn't make much sense.
 const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
   const eventType = context.eventName; // 'issues' or 'pull_request'
   console.log('eventType', eventType);
@@ -19,19 +18,20 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
   const state = issuePRData.state;
   console.log('state', state);
 
+  // Issue/PR must be open
   if (state !== 'open') {
     console.log('Issue/PR is not open ... skipping');
     return;
   }
 
-
   // Make sure its a SB
-  const isSB = /^\[SB\]:/.test(issuePRData.title);
+  const isSB = /^\[SB\] /.test(issuePRData.title);
   if (!isSB) {
     console.log('Issue is not a SB ... skipping');
     return;
   }
 
+  // Forks are not supported
   if (!isIssue && issuePRData.head.repo.fork) {
     console.log('SB PR is only supported for non-forked repositories ... skipping');
     return;
@@ -39,7 +39,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
 
 
   // Get issue, since its a converted issue, we need to get the original issue
-  // to get the originial issue creator
+  // instead of the PR, to get the originial issue creator
   const { data: originalIssue } = await github.rest.issues.get({
     ...context.repo,
     issue_number: context.issue.number,
@@ -72,7 +72,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
   }
 
   let code = issuePRData.body.match(/^### Short Code Snippet\n[\S\s]*?```c\n(?<code>[\S\s]*?)```/mi)?.groups.code;
-  if (!code) { // Dont need it on a fork
+  if (!code) {
     throw new Error('Code Snippet not found. Most likely the issue was not formatted correctly after editing.');
   }
   code = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -80,7 +80,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
 
 
 
-  // 'new' will be replaced with the tracker id later on
+  // '0' will be replaced with the tracker id later on
   const fileName = `0_${context.issue.number}_${bug_type_letter}EC${Number.parseInt(expected_error_code)}`; 
   let filePath = `compiler_bugs/${fileName}.jai`;
 
@@ -88,7 +88,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
 
   // Delete old file if it exists, create new file, commit if it changed
   // We use this verbose api to avoid 2 separate commits, because we have
-  // to rename a file...
+  // to rename a file, when for example the error code changes.
   {
     // Check if the branch exists or create it
     let branchSha = null;
@@ -136,7 +136,6 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
       ...context.repo,
       commit_sha: branchSha,
     });
-
     const currentTreeSha = branchCommit.data.tree.sha;
 
     // Prepare the new tree entries
@@ -148,7 +147,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
 
     
 
-    // Create the new blob
+    // Create the new blob aka file content
     const blob = await github.rest.git.createBlob({
       ...context.repo,
       content: Buffer.from(code).toString('base64'),
@@ -190,6 +189,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
       });
 
 
+    // If the file was not replaced, add it
     if (!replacedFile) {
       console.log('Adding file:', filePath);
       newTree.push({
@@ -208,6 +208,7 @@ const convertSBIssueToPRAndSynchronize = async ({ github, context }) => {
     });
 
     // Check if the new tree is identical to the current tree
+    // to avoid empty commits
     if (newTreeResponse.data.sha !== tree.data.sha) {
       // Create a new commit
       const newCommit = await github.rest.git.createCommit({

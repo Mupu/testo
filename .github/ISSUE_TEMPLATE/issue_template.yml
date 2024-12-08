@@ -1,6 +1,6 @@
 name: Bug Report - Single File (Automated PR)
 description: Report your bug here if its a small one(one file).
-title: "[SB]: Bug Report - Single File (DO NOT EDIT TITLE)"
+title: "[SB] Bug Report - Single File (DO NOT EDIT TITLE)"
 body:
 
   - type: markdown
@@ -12,7 +12,7 @@ body:
   - type: textarea
     id: info_box_area
     attributes:
-      label: "[SB]: Bug Report - Single File"
+      label: "[SB] Bug Report - Single File"
       value: |
           Please fill out the form below to report a bug in a single file.
           As long the PR is not merged, changes made to this issue/PR will be 
