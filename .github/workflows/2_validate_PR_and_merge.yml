@@ -11,8 +11,13 @@ permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
-  # We need to make sure the whole program works as expected even when canceled at any point.
-  # cancel-in-progress: true # @todo test without
+  # We need to make sure the whole program works as expected even when canceled at any point...
+  # Alternatively we *could* also check for old deployments and cancel them, which is more work.
+  # In reality this should basically never happen, as its only 2 people beeing able to trigger this 
+  # workflow, the maintainer and the contributer via PR edit. It's quite unlikely that it collides.
+  # currently the worst outcome is a oprhaned tracker issue, which is not that bad.
+  # @todo maybe make this cancel all previous deployments instead
+  cancel-in-progress: true
 
 jobs:
   # Since only workflow files themselves are safe when using pull_request_target
