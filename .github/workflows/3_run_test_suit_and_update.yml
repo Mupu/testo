@@ -2,9 +2,9 @@ name: 3_run_test_suit_and_update
 
 on:
   workflow_dispatch: # Manual trigger
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 
 permissions: {}
 
