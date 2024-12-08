@@ -5,9 +5,9 @@ This project started as just a small tool, was made to keep track of all the com
 
 # Contributions
 ## Security
-As of now, we are not allowed to share the compiler itself. I had asked Jon if it's fine to 'share' it with Microsoft runners, but did not exactly get a straight answer. For that reason, I'm using my own self-hosted runners. Sadly, this, and the nature of Jai's compile-time capabilities, represent a great threat. As I don't want to leak the compiler and even less, want to get my runners compromised, I tried to be as thorough as possible with security checks.
+As of now, we are not allowed to share the compiler itself. I had asked Jon if it's fine to 'share' it with Microsoft runners, but did not exactly get a straight answer. For that reason, I'm using my own self-hosted runners. Sadly, this, and the very nature of Jai's compile-time capabilities, represent a great threat. As I don't want to leak the compiler and even less, want to get my runners compromised, I tried to be as thorough as possible with security checks.
 
-Since security is a tricky topic and VERY simple to get wrong or overlook things, I'd highly appreciate you looking over the automation and giving feedback.
+Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. this would mainly invole worklow 1 and 2, as 3 runs on push on master which is expected to be safe. 1 converts issues to PR and keeps them up to date. I don't think there is much to do wrong, but you never know. the most important one to get right is 2. If only want to audit one, do that one.
 
 ## Report Small Bug (Single File)
 If you want to report a bug that fits into a single file, the right place is to use the Bug Report - `Single File (Automated PR)` template. This pipeline is fully automated. It should be self-explanatory. If you have any suggestions for new bug categories, let me know, and I'll add them to the list.
