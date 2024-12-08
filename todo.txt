@@ -14,21 +14,22 @@
 # [x] check if we can reduce needed permissions and filters.
 # [ ] add labels for new and just fixed issues
 # [x] readme
-# [ ] readme link workflows
+# [ ] readme link workflows and relative paths
+# [ ] finish review of 3.js
 
 
 
 # [x] latest compiler output
 # [x] rename template to tid_PRid_CEC0.jai
-# [ ] for issue update in bug suit make rate limit works, for when a new version is released
-# [ ] PR template
-# [ ] test BB pipeline
-      currently problemo, because createTree is failing on forks, even with all permissions...
 
 
 #
 # FOR RELEASE
 #
+# [ ] for issue update in bug suit make rate limit works, for when a new version is released
+# [ ] PR template
+# [ ] test BB pipeline
+      currently problemo, because createTree is failing on forks, even with all permissions...
 
 # [-] making the test run without offline platform? How?
        NOTE: Not directly possible (https://github.com/orgs/community/discussions/50926)
