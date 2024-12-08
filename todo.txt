@@ -14,6 +14,7 @@
 # [x] check if we can reduce needed permissions and filters.
 # [ ] add labels for new and just fixed issues
 # [x] readme
+# [ ] readme link workflows
 
 
 
