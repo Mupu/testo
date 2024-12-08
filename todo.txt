@@ -12,14 +12,10 @@
 # [x] look at concurrency locks
       Not good, mainly because comments could get lost or things inside the ifs after first creation :(
 # [x] check if we can reduce needed permissions and filters.
-# [ ] add labels for new and just fixed issues
 # [x] readme
 # [x] readme link workflows and relative paths
 # [x] security and bug issue template
-# [ ] finish review of 3.js
-
-
-
+# [x] finish review of 3.js
 # [x] latest compiler output
 # [x] rename template to tid_PRid_CEC0.jai
 
@@ -27,6 +23,7 @@
 #
 # FOR RELEASE
 #
+# [ ] add labels for new and just fixed issues
 # [ ] maybe also add -x64 backend
 # [ ] think about detecting sb via label instead
 # [ ] for issue update in bug suit make rate limit works, for when a new version is released
