@@ -21,6 +21,9 @@ As of now, we are not allowed to share the compiler itself. I had asked Jon if i
 
 Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. This would mainly invole [workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) and [workflow 2](.github/workflows/2_validate_PR_and_merge.yml), as [workflow 3](.github/workflows/3_run_test_suit_and_update.yml) runs on push on master which is expected to be safe. [Workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) converts issues to PRs and keeps them up to date. I don't think there is much to do wrong, but you never know. The most important one to get right is [workflow 2](.github/workflows/2_validate_PR_and_merge.yml). If only want to audit one, do that one.
 
+## Suggestions
+If you have any suggestions for improvements or ideas for missing bug categories, tell me by using the []() template.
+
 ## Report a Bug in regard to security
 If you find any bug or have something you're concerned about in regard to possible security implications, please the [Security Issue](https://github.com/Mupu/JaiCommunityBugTrackerDev/issues/new?assignees=&labels=security&projects=&template=security_issue_template.yml&title=%5BSECURITY%5D+) template. Make sure to [link the important code section](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet) via githubs permalinks. I will respond as fast as possible to resolve all secuirty problems.
 
