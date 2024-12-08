@@ -1,0 +1,19 @@
+name: Security Issue
+description: Report a security-related issue
+title: "[SECURITY] "
+labels: ["security"]
+assignees: ["Mupu"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a security issue. Please provide the details below.
+        Make sure to [link the important code section](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet) via githubs permalinks.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem description
+      description: Describe the security issue
+      placeholder: Describe the security issue

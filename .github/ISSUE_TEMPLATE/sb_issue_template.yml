@@ -1,6 +1,7 @@
 name: Bug Report - Single File (Automated PR)
 description: Report your bug here if its a small one(one file).
 title: "[SB] Bug Report - Single File (DO NOT EDIT TITLE)"
+labels: ["SB"]
 body:
 
   - type: markdown

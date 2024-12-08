@@ -1,3 +1,15 @@
+# Table of Contents
+1. [Jai Community Bug Tracker](#jai-community-bug-tracker)
+2. [THIS IS JUST THE DEV REPO THE REAL ONE IS HERE](#this-is-just-the-dev-repo-the-real-one-is-here)
+3. [Contributions](#contributions)
+  1. [Security](#security)
+  2. [Report a Bug in regard to security](#report-a-bug-in-regard-to-security)
+  3. [Report a Bug in the CI (not a Jai compiler bug)](#report-a-bug-in-the-ci-not-a-jai-compiler-bug)
+  4. [Report Small Bug (Single File)](#report-small-bug-single-file)
+  5. [Report Big Bug (Multiple Files)](#report-big-bug-multiple-files)
+4. [Make your own Bug Tracker](#make-your-own-bug-tracker)
+5. [License](#license)
+
 # Jai Community Bug Tracker
 This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suit. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms (windows 10, linux-ubuntu-22, mac (comming soon)), and notify you when they get fixed - or even when they break again. 
 
@@ -10,7 +22,7 @@ As of now, we are not allowed to share the compiler itself. I had asked Jon if i
 Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. This would mainly invole workflow [1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) and [2](.github/workflows/2_validate_PR_and_merge.yml), as 3 runs on push on master which is expected to be safe. workflow 1 converts issues to PR and keeps them up to date. I don't think there is much to do wrong, but you never know. the most important one to get right is workflow [2](.github/workflows/2_validate_PR_and_merge.yml). If only want to audit one, do that one.
 
 ## Report a Bug in ragard to security
-If you find any bug or have something you're concerned about in regard to possible security implications, please the [XXX]() template. Make sure to [link the important code section]() via githubs permalinks. I will respond as fast as possible to resolve all secuirty problems.
+If you find any bug or have something you're concerned about in regard to possible security implications, please the [XXX]() template. Make sure to [link the important code section](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet) via githubs permalinks. I will respond as fast as possible to resolve all secuirty problems.
 
 ## Report a Bug in the CI (not a Jai compiler bug)
 When you happen to find any other bug thats not related to Jai nor security, please use the [xxx]() template. Ofcourse, you can also create a PR fixing the issues instead!
