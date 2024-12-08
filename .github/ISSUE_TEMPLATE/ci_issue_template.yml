@@ -1,7 +1,7 @@
 name: CI Issue
 description: Report a bug related to the automation
 title: "[BUG] "
-labels: ["leak"]
+labels: ["bug"]
 
 body:
   - type: markdown
