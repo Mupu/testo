@@ -9,8 +9,14 @@ As of now, we are not allowed to share the compiler itself. I had asked Jon if i
 
 Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. This would mainly invole workflow [1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) and [2](.github/workflows/2_validate_PR_and_merge.yml), as 3 runs on push on master which is expected to be safe. workflow 1 converts issues to PR and keeps them up to date. I don't think there is much to do wrong, but you never know. the most important one to get right is workflow [2](.github/workflows/2_validate_PR_and_merge.yml). If only want to audit one, do that one.
 
+## Report a Bug in ragard to security
+If you find any bug or have something you're concerned about in regard to possible security implications, please the [XXX]() template. Make sure to [link the important code section]() via githubs permalinks. I will respond as fast as possible to resolve all secuirty problems.
+
+## Report a Bug in the CI (not a Jai compiler bug)
+When you happen to find any other bug thats not related to Jai nor security, please use the [xxx]() template. Ofcourse, you can also create a PR fixing the issues instead!
+
 ## Report Small Bug (Single File)
-If you want to report a bug that fits into a single file, the right place is to use the Bug Report - `Single File (Automated PR)` template. This pipeline is fully automated. It should be self-explanatory. If you have any suggestions for new bug categories, let me know, and I'll add them to the list.
+If you want to report a bug that fits into a single file, the right place is to use the [Bug Report - Single File (Automated PR)](https://github.com/Mupu/JaiCommunityBugTrackerDev/issues/new?projects=&template=sb_issue_template.yml&title=%5BSB%5D+Bug+Report+-+Single+File+%28DO+NOT+EDIT+TITLE%29) template. This pipeline is fully automated. It should be self-explanatory. If you have any suggestions for new bug categories, let me know, and I'll add them to the list.
 
 ## Report Big Bug (Multiple Files)
 *No automation yet!* - Just open a normal PR. The only 2 rules are: 
