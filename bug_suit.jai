@@ -9,6 +9,7 @@
 //
 // you can pass the test suit a single file to run, instead of running all tests
 //       jai bug_suit.jai - <file_to_run>
+// you just pass the test name without the path and it has to be in the 'compiler_bugs' directory
 //
 // The results are written to 'test_results.json'. If it already exists, existing 
 // results are overwritten - otherwise they will be appended.

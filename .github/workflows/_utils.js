@@ -22,7 +22,7 @@ const getCurrentJaiVersion = async ({ exec }) => {
     },
   };
 
-  // currently this is a bug in jai so we need the workaround script
+  // currently there is a bug in jai so we need the workaround script
   await exec.exec('jai jai_version_workaround.jai', [], options);
 
   const versionMatch = jaiVersionOutput.match(/beta.\d+\.\d+\.\d+/);

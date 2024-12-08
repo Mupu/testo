@@ -1,4 +1,3 @@
-const { default: test } = require('node:test');
 const { makeExtendedRegExp } = require('./_utils.js');
 
 // Make sure the regex capture groups stay the same :regexGroupNames
@@ -66,7 +65,7 @@ function migrateIssueHistory(issueBody) {
 
 
 
-// We use this so have to change fewer things when adding a new platform
+// We use this so we have to change fewer places when adding a new platform
 function getGroupNames(regex) {
   const pattern = /\(\?<(\w+)>/g;
   const groupNames = [];
@@ -179,6 +178,7 @@ const runTestSuitAndGatherOutput = async ({ github, context, exec, io }) => {
     while (true) {
       const extension = path.extname(compilerPath);
       tempVersion = decrementVersionString(tempVersion);
+      // hardcoded paths, that are relative to the compiler path
       const newCompilerPath =
         path.resolve(compilerPath, '..', '..', '..', `jai-${tempVersion}/bin`) +
         `${path.sep}jai${suffix}${extension}`;

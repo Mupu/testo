@@ -15,7 +15,7 @@
 # [ ] add labels for new and just fixed issues
 # [x] readme
 # [x] readme link workflows and relative paths
-# [ ] security and bug issue template
+# [x] security and bug issue template
 # [ ] finish review of 3.js
 
 
@@ -27,6 +27,8 @@
 #
 # FOR RELEASE
 #
+# [ ] maybe also add -x64 backend
+# [ ] think about detecting sb via label instead
 # [ ] for issue update in bug suit make rate limit works, for when a new version is released
 # [ ] PR template
 # [ ] test BB pipeline
@@ -41,7 +43,7 @@
 # [ ] history (de)compression
 # [ ] optional checking if test really crashes on latest version after manual approval
 # [ ] create the categoreies list for issue clasification
-# [ ] add machine os data etc to issue like windows version
+# [ ] add machine os data etc to issue like windows version, take a look at runner envs
 # [ ] fix issue links in readme
 
 
