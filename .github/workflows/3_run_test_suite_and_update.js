@@ -78,7 +78,7 @@ function getGroupNames(regex) {
 
 
 
-const runTestSuitAndGatherOutput = async ({ github, context, exec, io }) => {
+const runTestSuiteAndGatherOutput = async ({ github, context, exec, io }) => {
   const path = require('path');
   const fs = require('fs');
   const {
@@ -133,9 +133,9 @@ const runTestSuitAndGatherOutput = async ({ github, context, exec, io }) => {
   
   
   
-  // Run test suit for all tests
+  // Run test suite for all tests
   const options = { silent: false };
-  await exec.exec(`${compilerPath} bug_suit.jai`, [], options);
+  await exec.exec(`${compilerPath} bug_suite.jai`, [], options);
 
 
 
@@ -163,8 +163,8 @@ const runTestSuitAndGatherOutput = async ({ github, context, exec, io }) => {
 
 
 
-  // Run the test suit for all older compiler versions for each new test
-  // We will only run the test suit for theses tests, instead of all tests
+  // Run the test suite for all older compiler versions for each new test
+  // We will only run the test suite for theses tests, instead of all tests
   for (const currentIssueNumber of newIssueNumbers) {
     console.log('handle newTest', JSON.stringify(newTestResults[currentIssueNumber], null, 2));
 
@@ -186,7 +186,7 @@ const runTestSuitAndGatherOutput = async ({ github, context, exec, io }) => {
       if (!fs.existsSync(newCompilerPath)) break;
       console.log('Running for version:', tempVersion);
       console.log('newCompilerPath', newCompilerPath);
-      await exec.exec(`${newCompilerPath} bug_suit.jai - ${filePath}`, [], options);
+      await exec.exec(`${newCompilerPath} bug_suite.jai - ${filePath}`, [], options);
     }
   }
 
@@ -274,7 +274,7 @@ const updateGithubIssuesAndFiles = async ({
     if (!newResultsForCurrentVersion) {
       console.log('No results found for:', issueNumber, currentJaiVersion);
       throw new Error(
-        'No results found. This should never happen. Most likely something bad happened, or the runner this is running on was not part of the suit runners anymore! In the latter case, this runner could be out of date - or the only one with a newer version.',
+        'No results found. This should never happen. Most likely something bad happened, or the runner this is running on was not part of the suite runners anymore! In the latter case, this runner could be out of date - or the only one with a newer version.',
       );
     }
 
@@ -322,7 +322,7 @@ const updateGithubIssuesAndFiles = async ({
     if (!newResultsForCurrentVersion) {
       console.log('No results found for:', issueNumber, currentJaiVersion);
       throw new Error(
-        'No results found. This should never happen. Most likely something bad happened, or the runner this is running on was not part of the suit runners anymore! In the latter case, this runner could be out of date - or the only one with a newer version.',
+        'No results found. This should never happen. Most likely something bad happened, or the runner this is running on was not part of the suite runners anymore! In the latter case, this runner could be out of date - or the only one with a newer version.',
       );
     }
 
@@ -786,6 +786,6 @@ const updateGithubIssuesAndFiles = async ({
 };
 
 module.exports = {
-  runTestSuitAndGatherOutput,
+  runTestSuiteAndGatherOutput,
   updateGithubIssuesAndFiles,
 };

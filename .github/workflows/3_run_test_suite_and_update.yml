@@ -1,4 +1,4 @@
-name: 3_run_test_suit_and_update
+name: 3_run_test_suite_and_update
 
 on:
   workflow_dispatch: # Manual trigger
@@ -21,7 +21,7 @@ concurrency:
 # be able to run code on the runner, which is bad, but not the worst thing..
 jobs:
   # Gather all data from all platforms
-  run-test-suit:
+  run-test-suite:
     strategy:
       matrix:
         # This decides all relevant platforms. Platforms that are not in here
@@ -53,12 +53,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Bug Suit
+      - name: Run Bug Suite
         uses: actions/github-script@v7
         with:
           script: |
-            const { runTestSuitAndGatherOutput } = require('./.github/workflows/3_run_test_suit_and_update.js');
-            await runTestSuitAndGatherOutput({ github, context, exec, io });
+            const { runTestSuiteAndGatherOutput } = require('./.github/workflows/3_run_test_suite_and_update.js');
+            await runTestSuiteAndGatherOutput({ github, context, exec, io });
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -71,7 +71,7 @@ jobs:
 
   # Analyze the data and update the issues and files
   update_github_files_and_issues:
-    needs: run-test-suit
+    needs: run-test-suite
     runs-on: [self-hosted]
     permissions:
       issues: write
@@ -100,5 +100,5 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { updateGithubIssuesAndFiles } = require('./.github/workflows/3_run_test_suit_and_update.js');
+            const { updateGithubIssuesAndFiles } = require('./.github/workflows/3_run_test_suite_and_update.js');
             await updateGithubIssuesAndFiles({ github, context, exec, io });

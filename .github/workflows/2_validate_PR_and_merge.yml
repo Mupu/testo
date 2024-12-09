@@ -237,7 +237,7 @@ jobs:
       - name: Create Tracking Issue and merge Pull Request
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.app_token.outputs.token }} # we need to trigger the bugsuit on merge
+          github-token: ${{ steps.app_token.outputs.token }} # we need to trigger the bugsuite on merge
           script: |
             console.log(`Manual approval was given for Pull Request #${context.issue.number}...`);
 
@@ -304,7 +304,7 @@ jobs:
             // Use the base branches js!
             const { createTrackingIssueFromPR, renameAllFilesToMatchTracker } = require('./base/.github/workflows/2_create_tracking_issue_from_PR.js');
 
-            // Create or use existing tracking issue so the bug suit already can use it.
+            // Create or use existing tracking issue so the bug suite already can use it.
             // If canceled right after this call, it could create orphans :cancelInProgress
             const trackerIssueNumber = await createTrackingIssueFromPR({ github, context, originalPRData });
             console.log('trackerIssueNumber', trackerIssueNumber);

@@ -2,8 +2,8 @@
 # REWORK TODO LIST
 #
 
-# [x] make bug_suit output new structure
-# [x] cleanup bugsuit
+# [x] make bug_suite output new structure
+# [x] cleanup bugsuite
 # [x] cleanup and rework (1)
 # [x] cleanup and rework (2)
 # [x] cleanup and rework (2.1)
@@ -27,7 +27,7 @@
 # [ ] add labels for new and just fixed issues
 # [ ] maybe also add -x64 backend
 # [ ] think about detecting sb via label instead
-# [ ] for issue update in bug suit make rate limit works, for when a new version is released
+# [ ] for issue update in bug suite make rate limit works, for when a new version is released
 # [ ] PR template
 # [ ] test BB pipeline
       currently problemo, because createTree is failing on forks, even with all permissions...

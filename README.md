@@ -11,7 +11,7 @@
 5. [License](#license)
 
 # Jai Community Bug Tracker
-This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suit. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms (windows 10, linux-ubuntu-22, macos (comming soon)), and notify you when they get fixed - or even when they break again. 
+This project started as just a small tool, was made to keep track of all the compiler bugs I found. Since a few people liked the idea of it, I started making this project - a completely automated testing suite. It is simple and fast to add new bugs, as 99% of bugs are small crashes you can strip down to a single file or even a few lines of code. This tracker will keep track of all bugs across all new versions and platforms (windows 10, linux-ubuntu-22, macos (comming soon)), and notify you when they get fixed - or even when they break again. 
 
 # THIS IS JUST THE DEV REPO THE REAL ONE IS [HERE](https://github.com/Mupu/JaiCommunityBugTracker/)
 
@@ -19,7 +19,7 @@ This project started as just a small tool, was made to keep track of all the com
 ## Security
 As of now, we are not allowed to share the compiler itself. I had asked Jon if it's fine to 'share' it with Microsoft runners, but did not exactly get a straight answer. For that reason, I'm using my own self-hosted runners. Sadly, this, and the very nature of Jai's compile-time capabilities, represent a great threat. As I don't want to leak the compiler and even less, want to get my runners compromised, I tried to be as thorough as possible with security checks.
 
-Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. This would mainly invole [workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) and [workflow 2](.github/workflows/2_validate_PR_and_merge.yml), as [workflow 3](.github/workflows/3_run_test_suit_and_update.yml) runs on push on master which is expected to be safe. [Workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) converts issues to PRs and keeps them up to date. I don't think there is much to do wrong, but you never know. The most important one to get right is [workflow 2](.github/workflows/2_validate_PR_and_merge.yml). If only want to audit one, do that one.
+Since security is a tricky topic and VERY simple to get wrong or to overlook things, I'd highly appreciate you looking over the automation and giving feedback. This would mainly invole [workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) and [workflow 2](.github/workflows/2_validate_PR_and_merge.yml), as [workflow 3](.github/workflows/3_run_test_suite_and_update.yml) runs on push on master which is expected to be safe. [Workflow 1](.github/workflows/1_SB_issue_to_PR_synchronizer.yml) converts issues to PRs and keeps them up to date. I don't think there is much to do wrong, but you never know. The most important one to get right is [workflow 2](.github/workflows/2_validate_PR_and_merge.yml). If only want to audit one, do that one.
 
 ## Suggestions
 If you have any suggestions for improvements or ideas for missing bug categories, tell me by using the []() template.
