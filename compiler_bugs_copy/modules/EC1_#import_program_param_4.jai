@@ -21,7 +21,7 @@
                     , w);
   add_build_string("BLOCKER :: true;", w, code=MY_MODULE_SCOPE);
 }
-#placeholder BLOCKER;
+// #placeholder BLOCKER;
 #run {
   write_strings("BLOCKER = ");
   write_number(xx BLOCKER);

@@ -51,7 +51,10 @@ Test_Result :: struct
   
   
   // need to do it like this, so other deferes can be tracked
-  defer report_memory_leaks();
+  defer {
+    reset_temporary_storage();
+    report_memory_leaks();
+  }
 
 
   print("\n\n");
@@ -327,7 +330,7 @@ compile_program :: (test_result: *Test_Result, jai_path: string) -> (compile_pro
   {
     status_text := ifx passed_compilation_as_expected
                   then "SUCCESS" 
-                  else tprint("FAILURE - Got Exit Code % (timeout reached: %), Expected %", 
+                  else tprint("FAILURE - Got Exit Code %, Expected % (timeout reached: %)", 
                               compile_process_result.exit_code, 
                               timeout_reached,
                               test_result.expected_compilation_exit_code);
