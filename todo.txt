@@ -23,6 +23,7 @@
 #
 # FOR RELEASE
 #
+# [ ] maybe exclude logs from change detection?
 # [ ] think about bugs with modules again (probably modules folder inside bug folder?)
 # [ ] add labels for new and just fixed issues
 # [ ] maybe also add -x64 backend
